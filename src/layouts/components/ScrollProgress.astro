@@ -1,0 +1,32 @@
+---
+// Thin gradient bar along the top edge that fills as the page is read.
+---
+
+<div
+  class="bg-brand pointer-events-none fixed inset-x-0 top-0 z-60 h-[3px] origin-left [transform:scaleX(var(--sp,0))]"
+  aria-hidden="true"
+>
+</div>
+
+<script>
+  const root = document.documentElement;
+  let ticking = false;
+
+  function paint() {
+    ticking = false;
+    const max = root.scrollHeight - window.innerHeight;
+    const progress = max > 0 ? (window.scrollY / max).toFixed(4) : "0";
+    root.style.setProperty("--sp", progress);
+  }
+
+  function onScroll() {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(paint);
+    }
+  }
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll);
+  paint();
+</script>

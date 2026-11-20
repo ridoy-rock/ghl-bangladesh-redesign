@@ -1,0 +1,112 @@
+---
+import Button from "@/components/Button.astro";
+import { highlight } from "@/lib/utils/textConverter";
+
+const { call_to_action } = Astro.props;
+const { enable, title, button } = call_to_action.data;
+
+// The three rising arrows of the logo: yellow, blue, green. Each one is drawn
+// twice (a solid arrow and a faint outline above it) and fades out at the bottom.
+const arrows = [
+  { color: "yellow", top: 330, path: "M95 330L160 394H123V600H67V394H30Z" },
+  { color: "blue", top: 180, path: "M260 180L325 244H288V600H232V244H195Z" },
+  { color: "green", top: 30, path: "M425 30L490 94H453V600H397V94H360Z" },
+] as const;
+
+const fills = {
+  yellow: "fill-yellow stroke-yellow",
+  blue: "fill-blue stroke-blue",
+  green: "fill-green stroke-green",
+};
+
+const outlines = {
+  yellow: "stroke-yellow",
+  blue: "stroke-blue",
+  green: "stroke-green",
+};
+---
+
+{
+  enable && (
+    <section
+      class="pb-[clamp(80px,10vw,130px)]"
+      id="join"
+      aria-labelledby="invite-heading"
+    >
+      <div class="container">
+        <div class="invite-card reveal relative isolate flex min-h-[520px] flex-col items-start justify-end gap-[clamp(28px,3.4vw,44px)] overflow-hidden rounded-[32px] bg-[linear-gradient(150deg,#0c2c4a_0%,var(--color-navy)_58%)] px-[clamp(28px,6vw,90px)] py-[clamp(40px,7vw,96px)] text-white shadow-[inset_0_0_0_1px_rgb(255_255_255/0.07)] min-[761px]:min-h-[clamp(460px,44vw,620px)] min-[761px]:justify-center">
+          <svg
+            class="invite-arrows absolute top-0 right-2 -z-1 h-[52%] w-[72%] overflow-visible min-[761px]:top-auto min-[761px]:right-[clamp(12px,5vw,84px)] min-[761px]:bottom-0 min-[761px]:h-[94%] min-[761px]:w-[46%]"
+            viewBox="0 0 520 600"
+            preserveAspectRatio="xMaxYMax meet"
+            aria-hidden="true"
+          >
+            <defs>
+              {arrows.map((arrow, index) => (
+                <>
+                  <linearGradient
+                    id={`iaf${index + 1}`}
+                    gradientUnits="userSpaceOnUse"
+                    x1="0"
+                    y1={arrow.top}
+                    x2="0"
+                    y2="600"
+                  >
+                    <stop offset="0" stop-color="#fff" />
+                    <stop offset=".45" stop-color="#fff" stop-opacity=".85" />
+                    <stop offset="1" stop-color="#fff" stop-opacity="0" />
+                  </linearGradient>
+                  <mask
+                    id={`iam${index + 1}`}
+                    maskUnits="userSpaceOnUse"
+                    x="-20"
+                    y="-80"
+                    width="560"
+                    height="700"
+                  >
+                    <rect
+                      x="-20"
+                      y="-80"
+                      width="560"
+                      height="700"
+                      fill={`url(#iaf${index + 1})`}
+                    />
+                  </mask>
+                </>
+              ))}
+            </defs>
+            {arrows.map((arrow, index) => (
+              <g class={`ia ia-${index + 1}`}>
+                <g mask={`url(#iam${index + 1})`}>
+                  <path
+                    class:list={["fill-none", outlines[arrow.color]]}
+                    d={arrow.path}
+                    transform="translate(0 -44)"
+                    stroke-width="2.5"
+                    stroke-linejoin="round"
+                    opacity=".38"
+                  />
+                  <path
+                    class={fills[arrow.color]}
+                    d={arrow.path}
+                    stroke-width="10"
+                    stroke-linejoin="round"
+                  />
+                </g>
+              </g>
+            ))}
+          </svg>
+
+          <h2
+            id="invite-heading"
+            class="max-w-[11ch] text-[length:clamp(40px,6.2vw,94px)] leading-[0.98] font-extrabold tracking-[-0.04em]"
+            set:html={highlight(title)}
+          />
+          {button.enable && (
+            <Button size="lg" label={button.label} href={button.link} />
+          )}
+        </div>
+      </div>
+    </section>
+  )
+}

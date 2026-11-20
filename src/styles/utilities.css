@@ -1,0 +1,41 @@
+/* brand gradient: green → mint → blue → yellow, the three logo colours in one sweep */
+@utility bg-brand {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-green) 0%,
+    #7be0a0 35%,
+    var(--color-blue) 70%,
+    var(--color-yellow) 100%
+  );
+}
+
+/* navy veil that keeps the hero text readable over the video */
+@utility bg-hero-veil {
+  background-image:
+    radial-gradient(
+      120% 80% at 0% 100%,
+      color-mix(in srgb, var(--color-navy) 97%, transparent) 20%,
+      color-mix(in srgb, var(--color-navy) 55%, transparent) 60%,
+      color-mix(in srgb, var(--color-navy) 25%, transparent) 100%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--color-navy) 65%, transparent) 0%,
+      color-mix(in srgb, var(--color-navy) 0%, transparent) 30%,
+      color-mix(in srgb, var(--color-navy) 60%, transparent) 100%
+    );
+}
+
+/* soft section background used on inner pages */
+@utility bg-gradient {
+  @apply from-body to-light dark:from-darkmode-body dark:to-darkmode-light bg-linear-to-b;
+}
+
+/* form style */
+@utility form-input {
+  @apply bg-light text-text-dark placeholder:text-text-light focus:border-primary dark:focus:border-darkmode-primary dark:border-darkmode-border dark:bg-darkmode-light dark:text-darkmode-text-light w-full rounded border-transparent px-6 py-4 focus:ring-transparent;
+}
+
+@utility form-label {
+  @apply font-secondary text-text-dark dark:text-darkmode-text-light mb-4 block text-xl font-normal;
+}

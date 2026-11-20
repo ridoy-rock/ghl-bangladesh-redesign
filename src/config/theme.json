@@ -1,0 +1,58 @@
+{
+  "colors": {
+    "default": {
+      "theme_color": {
+        "primary": "#0bce55",
+        "body": "#f5f6f1",
+        "border": "rgba(13, 31, 26, 0.12)",
+        "light": "#eceee6",
+        "dark": "#061d30",
+        "card": "#ffffff",
+        "accent": "#174838",
+        "navy": "#061d30",
+        "navy_2": "#0a2a44",
+        "navy_3": "#103656",
+        "green": "#0bce55",
+        "blue": "#20a9ed",
+        "yellow": "#f8d325",
+        "bd_red": "#f42a41",
+        "bd_green": "#006a4e",
+        "on_dark": "#f2f6f4",
+        "on_green": "#04240f"
+      },
+      "text_color": {
+        "text": "#3d4f49",
+        "text_dark": "#0d1f1a",
+        "text_light": "#6b7a74"
+      }
+    },
+    "darkmode": {
+      "theme_color": {
+        "primary": "#0bce55",
+        "body": "#081520",
+        "border": "rgba(255, 255, 255, 0.12)",
+        "light": "#0c1d2c",
+        "dark": "#061d30",
+        "card": "#0f2335",
+        "accent": "#8ee6b0"
+      },
+      "text_color": {
+        "text": "#c4d0cc",
+        "text_dark": "#eef3f1",
+        "text_light": "#8fa09a"
+      }
+    }
+  },
+  "fonts": {
+    "font_family": {
+      "primary": "Plus+Jakarta+Sans:wght@400;500;600;700;800",
+      "primary_type": "sans-serif",
+      "secondary": "Plus+Jakarta+Sans:wght@400;500;600;700;800",
+      "secondary_type": "sans-serif"
+    },
+    "font_size": {
+      "base": "17",
+      "scale": "1.2"
+    }
+  }
+}

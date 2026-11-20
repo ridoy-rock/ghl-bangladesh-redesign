@@ -1,0 +1,74 @@
+---
+import Button from "@/components/Button.astro";
+import { markdownify } from "@/lib/utils/textConverter";
+import { withBase } from "@/lib/utils/url";
+
+const { chapter_leader } = Astro.props;
+
+interface ProfileLink {
+  label: string;
+  link: string;
+  aria_label?: string;
+}
+---
+
+<section
+  class="section pt-0"
+  id="chapter-leader"
+  aria-labelledby="chapter-profile-name"
+>
+  <div class="container">
+    <div
+      class="reveal border-border bg-card dark:border-darkmode-border dark:bg-darkmode-card grid grid-cols-1 overflow-hidden rounded-[30px] border min-[901px]:grid-cols-[0.9fr_1.1fr]"
+    >
+      <div
+        class="bg-navy after:bg-brand relative aspect-[4/4.4] after:absolute after:inset-x-0 after:bottom-0 after:h-1.5 min-[901px]:aspect-auto min-[901px]:min-h-[520px]"
+      >
+        <img
+          class="absolute inset-0 size-full object-cover"
+          src={withBase(chapter_leader.image)}
+          alt={chapter_leader.image_alt}
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <div class="flex flex-col justify-center p-[clamp(32px,5vw,72px)]">
+        <span
+          class="bg-light text-text dark:bg-darkmode-light dark:text-darkmode-text inline-flex items-center gap-2.5 self-start rounded-full py-[7px] pr-3.5 pl-2 text-[13px] font-semibold"
+        >
+          <span class="flag-mark flag-mark-sm" aria-hidden="true"></span>{
+            chapter_leader.badge
+          }
+        </span>
+        <h2
+          class="my-5.5 text-[length:clamp(44px,5.6vw,80px)]"
+          id="chapter-profile-name"
+        >
+          {chapter_leader.name}
+        </h2>
+        <p
+          class="font-secondary text-text-dark dark:text-darkmode-text-dark mb-4 text-[length:clamp(20px,1.9vw,24px)] leading-[1.4] font-medium"
+          set:html={markdownify(chapter_leader.lead)}
+        />
+        <p
+          class="text-text dark:text-darkmode-text"
+          set:html={markdownify(chapter_leader.content)}
+        />
+        <div class="mt-8.5 flex flex-wrap gap-3">
+          {
+            chapter_leader.links.map((item: ProfileLink) => (
+              <Button
+                class="flex-none"
+                variant="outline"
+                label={item.label}
+                href={item.link}
+                aria-label={item.aria_label}
+              />
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

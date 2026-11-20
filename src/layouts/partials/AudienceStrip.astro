@@ -1,0 +1,58 @@
+---
+const { audience } = Astro.props;
+
+// The list is repeated so the marquee can loop without a gap.
+// Only the first run is announced to screen readers.
+const REPEATS = 4;
+const items = Array.from({ length: REPEATS }).flatMap((_, run) =>
+  audience.list.map((name: string) => ({ name, hidden: run > 0 })),
+);
+
+// separator stars cycle through the brand colours
+const starColors = ["text-green", "text-blue", "text-yellow", "text-bd-red"];
+---
+
+<div
+  class="bg-navy text-on-dark overflow-hidden border-t border-white/12"
+  role="region"
+  aria-labelledby="audience-strip-label"
+>
+  <div
+    class="container flex items-center gap-8 py-5.5 max-[641px]:flex-col max-[641px]:items-start max-[641px]:gap-2.5"
+  >
+    <p
+      id="audience-strip-label"
+      class="text-on-dark/72 flex-none text-[12.5px] font-semibold tracking-[0.14em] uppercase"
+    >
+      {audience.label}
+    </p>
+    <div
+      class="flex-1 overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_8%,#000_92%,transparent)] max-[641px]:w-full"
+    >
+      <ul class="animate-marquee flex w-max gap-10" role="list">
+        {
+          items.map((item, index) => (
+            <li
+              class="font-secondary flex items-center gap-10 text-[length:clamp(16px,1.6vw,21px)] font-medium tracking-[-0.005em] whitespace-nowrap"
+              aria-hidden={item.hidden ? "true" : undefined}
+            >
+              <span>{item.name}</span>
+              <svg
+                class:list={["size-3.5", starColors[index % starColors.length]]}
+                width="18"
+                height="18"
+                viewBox="0 0 18 18"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                aria-hidden="true"
+              >
+                <path d="M9 1v16M1 9h16M3.35 3.35l11.3 11.3M3.35 14.65l11.3-11.3" />
+              </svg>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</div>

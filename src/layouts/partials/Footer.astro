@@ -1,0 +1,89 @@
+---
+import Logo from "@/components/Logo.astro";
+import config from "@/config/config.json";
+import menu from "@/config/menu.json";
+import { markdownify } from "@/lib/utils/textConverter";
+import { isExternal, withBase } from "@/lib/utils/url";
+
+interface FooterLink {
+  name: string;
+  url: string;
+}
+
+interface FooterColumn {
+  title: string;
+  links: FooterLink[];
+}
+
+const { footer, legal }: { footer: FooterColumn[]; legal: FooterLink[] } = menu;
+const { copyright, footer_note } = config.params;
+---
+
+<footer class="border-border dark:border-darkmode-border border-t pt-16 pb-7">
+  <div class="container">
+    <div class="grid grid-cols-2 gap-10 min-[761px]:grid-cols-[1.4fr_1fr_1fr]">
+      <div class="col-span-full min-[761px]:col-auto">
+        <Logo imgClass="h-10 w-auto" />
+      </div>
+      <nav class="contents" aria-label="Footer navigation">
+        {
+          footer.map((column) => (
+            <div>
+              <h4 class="text-text-light dark:text-darkmode-text-light mb-4 text-[12.5px] leading-[1.65] font-semibold tracking-[0.14em] uppercase">
+                {column.title}
+              </h4>
+              <ul class="grid gap-2.5">
+                {column.links.map((link) => (
+                  <li>
+                    <a
+                      class="text-text-dark hover:text-accent dark:text-darkmode-text-dark dark:hover:text-darkmode-accent inline-flex items-center gap-1.5 font-medium no-underline hover:underline hover:underline-offset-4"
+                      href={withBase(link.url)}
+                      target={isExternal(link.url) ? "_blank" : undefined}
+                      rel={
+                        isExternal(link.url) ? "noopener noreferrer" : undefined
+                      }
+                    >
+                      {link.name}
+                      {isExternal(link.url) && (
+                        <svg
+                          width="14"
+                          height="14"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          aria-hidden="true"
+                        >
+                          <path d="M5 19 19 5M7 5h12v12" />
+                        </svg>
+                      )}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </nav>
+    </div>
+    <div
+      class="border-border text-text-light dark:border-darkmode-border dark:text-darkmode-text-light mt-14 flex flex-wrap justify-between gap-x-6 gap-y-3 border-t pt-6 text-[14px]"
+    >
+      <span set:html={markdownify(copyright)} />
+      <span set:html={markdownify(footer_note)} />
+      <nav class="flex gap-5" aria-label="Legal links">
+        {
+          legal.map((link) => (
+            <a
+              class="hover:text-text-dark dark:hover:text-darkmode-text-dark no-underline"
+              href={withBase(link.url)}
+            >
+              {link.name}
+            </a>
+          ))
+        }
+      </nav>
+    </div>
+  </div>
+</footer>

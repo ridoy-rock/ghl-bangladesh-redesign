@@ -1,0 +1,133 @@
+---
+import Button from "@/components/Button.astro";
+import { highlight, markdownify } from "@/lib/utils/textConverter";
+import { withBase } from "@/lib/utils/url";
+
+const { banner } = Astro.props;
+---
+
+<section
+  class="bg-navy text-on-dark before:bg-hero-veil relative isolate flex min-h-svh items-end overflow-hidden before:absolute before:inset-0 before:-z-1 after:absolute after:top-[10%] after:right-[-12vw] after:-z-1 after:size-[46vw] after:rounded-full after:bg-[radial-gradient(circle,rgb(32_169_237/0.25),transparent_65%)] after:blur-[10px]"
+  aria-labelledby="hero-heading"
+  data-hero
+>
+  <!-- The video is scaled up a little: its first seconds have black bars baked in at the sides. -->
+  <div
+    class="absolute inset-0 -z-2 overflow-hidden"
+    aria-hidden="true"
+    data-hero-media
+  >
+    <video
+      id="chapter-video"
+      class="size-full [transform:translate3d(0,var(--py,0px),0)_scale(1.2)] object-cover"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="metadata"
+      poster={withBase(banner.image)}
+    >
+      <source src={withBase(banner.video)} type="video/mp4" />
+    </video>
+  </div>
+
+  <div
+    class="container grid [transform:translate3d(0,var(--cy,0px),0)] grid-cols-1 gap-7 pt-[140px] pb-[clamp(48px,8vh,96px)] opacity-[var(--co,1)]"
+    data-hero-content
+  >
+    <span
+      class="js:animate-rise inline-flex items-center gap-3 self-start justify-self-start rounded-full border border-white/12 bg-white/8 py-2 pr-4 pl-2 text-[14px] font-medium backdrop-blur-[10px]"
+    >
+      <span class="flag-mark" aria-hidden="true"></span>
+      {banner.label}
+    </span>
+
+    <h1
+      id="hero-heading"
+      class="js:animate-rise max-w-[14ch] text-[length:clamp(46px,8.6vw,124px)] leading-[0.98] font-extrabold tracking-[-0.035em] [animation-delay:0.12s] [&_.grad-text]:pb-[0.06em]"
+      set:html={highlight(banner.title)}
+    />
+
+    <div
+      class="js:animate-rise flex flex-wrap items-end justify-between gap-x-12 gap-y-7 pt-2 [animation-delay:0.26s]"
+    >
+      <p
+        class="text-on-dark/72 max-w-[560px] text-[length:clamp(17px,1.5vw,20px)] leading-[1.6] [&_strong]:font-medium [&_strong]:text-white"
+        set:html={markdownify(banner.content)}
+      />
+      {
+        banner.button.enable && (
+          <Button
+            variant="ghost"
+            size="lg"
+            icon="down"
+            glyph={banner.button.glyph}
+            label={banner.button.label}
+            href={banner.button.link}
+          />
+        )
+      }
+    </div>
+  </div>
+
+  {
+    banner.scroll_cue && (
+      <span
+        class="text-on-dark/72 absolute right-[clamp(16px,4vw,40px)] bottom-7 text-[11px] tracking-[0.3em] uppercase [writing-mode:vertical-rl] max-[701px]:hidden"
+        aria-hidden="true"
+      >
+        {banner.scroll_cue}
+      </span>
+    )
+  }
+</section>
+
+<script>
+  const hero = document.querySelector<HTMLElement>("[data-hero]");
+  const media = document.querySelector<HTMLElement>("[data-hero-media]");
+  const content = document.querySelector<HTMLElement>("[data-hero-content]");
+  const video = document.getElementById(
+    "chapter-video",
+  ) as HTMLVideoElement | null;
+  const reduceMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+
+  // people who ask for less motion get the still poster instead of the video
+  if (video && reduceMotion) {
+    video.removeAttribute("autoplay");
+    try {
+      video.pause();
+    } catch (e) {}
+  }
+
+  // gentle parallax: the video drifts down and the text fades up while the hero scrolls away
+  if (hero && media && content && !reduceMotion) {
+    let ticking = false;
+
+    const paint = () => {
+      ticking = false;
+      const y = window.scrollY;
+      const height = hero.offsetHeight;
+      if (y < height) {
+        media.style.setProperty("--py", (y * 0.18).toFixed(1) + "px");
+        content.style.setProperty("--cy", (y * -0.12).toFixed(1) + "px");
+        content.style.setProperty(
+          "--co",
+          Math.max(0, 1 - y / (height * 0.75)).toFixed(3),
+        );
+      }
+    };
+
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(paint);
+      }
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    paint();
+  }
+</script>

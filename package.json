@@ -1,0 +1,53 @@
+{
+  "name": "ghl-bangladesh",
+  "version": "1.0.0",
+  "description": "GHL Bangladesh community site, built with Astro and Tailwind CSS on the Astroplate structure",
+  "private": true,
+  "packageManager": "pnpm@11.17.0",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"node scripts/themeGenerator.js --watch\" \"astro dev\"",
+    "build": "node scripts/themeGenerator.js && astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "format": "prettier -w ./src"
+  },
+  "dependencies": {
+    "@astrojs/check": "0.9.10",
+    "@astrojs/markdown-remark": "^7.2.1",
+    "@astrojs/mdx": "7.0.4",
+    "@astrojs/react": "6.0.1",
+    "@astrojs/sitemap": "3.7.3",
+    "@digi4care/astro-google-tagmanager": "^2.0.0",
+    "@justinribeiro/lite-youtube": "^1.9.0",
+    "astro": "7.1.4",
+    "astro-auto-import": "^0.5.2",
+    "github-slugger": "^2.0.0",
+    "marked": "^18.0.7",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "remark-collapse": "^0.1.2",
+    "remark-toc": "^9.0.0",
+    "sharp": "^0.35.3",
+    "vite": "^8.1.5"
+  },
+  "devDependencies": {
+    "@tailwindcss/forms": "^0.5.11",
+    "@tailwindcss/typography": "^0.5.20",
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/node": "26.1.2",
+    "@types/react": "19.2.17",
+    "@types/react-dom": "19.2.3",
+    "concurrently": "^10.0.4",
+    "prettier": "^3.9.6",
+    "prettier-plugin-astro": "^0.14.1",
+    "prettier-plugin-tailwindcss": "^0.8.1",
+    "tailwind-bootstrap-grid": "^7.0.0",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^6.0.3"
+  },
+  "overrides": {
+    "typescript": "$typescript",
+    "astro": "$astro"
+  }
+}

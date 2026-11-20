@@ -1,0 +1,51 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/forms";
+@plugin "@tailwindcss/typography";
+@plugin 'tailwind-bootstrap-grid';
+@custom-variant dark (&:where(.dark, .dark *));
+/* `js:` applies only once scripts are running, so nothing stays hidden without them */
+@custom-variant js (&:where(.js, .js *));
+
+/* Auto-generated theme from "theme.json"*/
+@import "./generated-theme.css";
+
+/* Motion tokens that theme.json does not cover */
+@theme {
+  --ease-soft: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  --animate-marquee: marquee 34s linear infinite;
+  --animate-sheen: sheen 8s ease-in-out infinite alternate;
+  --animate-rise: rise 1s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes sheen {
+    to {
+      background-position: 100% 0;
+    }
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+  }
+}
+
+@import "./safe.css";
+@import "./utilities.css";
+
+@layer base {
+  @import "./base.css";
+}
+
+@layer components {
+  @import "./components.css";
+  @import "./navigation.css";
+  @import "./buttons.css";
+}

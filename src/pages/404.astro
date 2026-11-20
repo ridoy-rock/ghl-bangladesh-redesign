@@ -1,0 +1,24 @@
+---
+import Button from "@/components/Button.astro";
+import Base from "@/layouts/Base.astro";
+---
+
+<Base title="Page Not Found" noindex>
+  <section class="bg-navy text-on-dark flex min-h-svh items-center text-center">
+    <div class="container py-[140px]">
+      <span
+        class="grad-text font-secondary block text-[8rem] leading-none font-extrabold"
+      >
+        404
+      </span>
+      <h1 class="h2 mt-4 mb-4">Page not found</h1>
+      <p class="text-on-dark/72 mx-auto max-w-[520px]">
+        The page you are looking for might have been removed, had its name
+        changed, or is temporarily unavailable.
+      </p>
+      <div class="mt-8 flex justify-center">
+        <Button label="Back to home" href="/" icon="left" iconFirst />
+      </div>
+    </div>
+  </section>
+</Base>

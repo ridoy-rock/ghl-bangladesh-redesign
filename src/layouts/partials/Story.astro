@@ -1,0 +1,156 @@
+---
+import { highlight, markdownify } from "@/lib/utils/textConverter";
+import { withBase } from "@/lib/utils/url";
+
+const { story } = Astro.props;
+
+interface Organiser {
+  name: string;
+  image: string;
+  alt: string;
+  link?: string;
+  link_label?: string;
+}
+
+// the dot before each name alternates between the brand green and blue
+const dotColors = ["before:bg-green", "before:bg-blue"];
+---
+
+<section
+  class="section"
+  id="our-story"
+  aria-labelledby="community-story-heading"
+>
+  <div
+    class="container grid grid-cols-1 items-start gap-[clamp(40px,7vw,110px)] min-[901px]:grid-cols-[1fr_1.1fr]"
+  >
+    <div>
+      <header class="reveal">
+        <span class="kicker">{story.kicker}</span>
+        <h2
+          id="community-story-heading"
+          class="mt-4.5 text-[length:clamp(40px,6vw,84px)]"
+          set:html={highlight(story.title)}
+        />
+      </header>
+
+      <div
+        class="relative mt-12 grid grid-cols-2 gap-4"
+        role="group"
+        aria-label={story.organisers_label}
+      >
+        {
+          story.organisers.map((person: Organiser, index: number) => (
+            <figure class:list={["reveal group", index % 2 === 1 && "mt-14"]}>
+              <div class="bg-light dark:bg-darkmode-light aspect-[4/5] overflow-hidden rounded-[22px] shadow-[0_30px_60px_-35px_rgb(6_29_48/0.5)]">
+                <img
+                  class="size-full object-cover transition-transform duration-700 ease-[ease] group-hover:[transform:scale(1.04)]"
+                  src={withBase(person.image)}
+                  alt={person.alt}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+              <figcaption
+                class:list={[
+                  "mt-3.5 flex items-center gap-2 text-[15px] font-semibold before:size-2 before:rounded-full",
+                  dotColors[index % dotColors.length],
+                ]}
+              >
+                {person.link ? (
+                  <a
+                    class="decoration-blue underline decoration-2 underline-offset-4"
+                    href={person.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={person.link_label}
+                  >
+                    {person.name}
+                  </a>
+                ) : (
+                  person.name
+                )}
+              </figcaption>
+            </figure>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- paragraph, quote mark and link styles: .story-content in src/styles/components.css -->
+    <div
+      class="story-content reveal"
+      data-story-text
+      set:html={markdownify(story.content, true)}
+    />
+  </div>
+</section>
+
+<script>
+  // Each word of the story is wrapped in a span and lights up as the reader scrolls through it.
+  const text = document.querySelector<HTMLElement>("[data-story-text]");
+  const reduceMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+
+  if (text && !reduceMotion) {
+    const words: HTMLSpanElement[] = [];
+    const lit = new WeakMap<HTMLSpanElement, boolean>();
+
+    const wrap = (node: Node) => {
+      Array.from(node.childNodes).forEach((child) => {
+        if (child.nodeType === Node.TEXT_NODE) {
+          const fragment = document.createDocumentFragment();
+          (child.textContent || "").split(/(\s+)/).forEach((part) => {
+            if (!part) return;
+            if (/^\s+$/.test(part)) {
+              fragment.appendChild(document.createTextNode(part));
+            } else {
+              const word = document.createElement("span");
+              word.className = "w";
+              word.textContent = part;
+              fragment.appendChild(word);
+              words.push(word);
+            }
+          });
+          node.replaceChild(fragment, child);
+        } else if (child.nodeType === Node.ELEMENT_NODE) {
+          wrap(child);
+        }
+      });
+    };
+
+    wrap(text);
+    text.classList.add("words");
+
+    let ticking = false;
+
+    const paint = () => {
+      ticking = false;
+      const rect = text.getBoundingClientRect();
+      const viewport = window.innerHeight;
+      let progress =
+        (viewport * 0.82 - rect.top) / (rect.height + viewport * 0.25);
+      progress = Math.max(0, Math.min(1, progress));
+      const reached = Math.round(progress * words.length);
+      words.forEach((word, index) => {
+        const on = index < reached;
+        if (lit.get(word) !== on) {
+          lit.set(word, on);
+          word.classList.toggle("on", on);
+        }
+      });
+    };
+
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(paint);
+      }
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    paint();
+  }
+</script>

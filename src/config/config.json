@@ -1,0 +1,48 @@
+{
+  "site": {
+    "title": "HighLevel Bangladesh | Community, Meetups & Workshops",
+    "base_url": "https://ghlbangladesh.com",
+    "base_path": "/",
+    "trailing_slash": false,
+    "favicon": "/images/community/chapter-logo.svg",
+    "logo": "/images/community/chapter-logo-dark.svg",
+    "logo_darkmode": "/images/community/chapter-logo.svg",
+    "logo_width": "1430",
+    "logo_height": "266",
+    "logo_text": "GHL Bangladesh"
+  },
+
+  "settings": {
+    "sticky_header": true,
+    "theme_switcher": false,
+    "default_theme": "system"
+  },
+
+  "params": {
+    "copyright": "© 2026 GHL Bangladesh",
+    "footer_note": "Made for the people building what’s next."
+  },
+
+  "navigation_button": {
+    "enable": true,
+    "label": "Join the community",
+    "link": "https://www.facebook.com/groups/highlevelbangladesh"
+  },
+
+  "google_tag_manager": {
+    "enable": false,
+    "gtm_id": "GTM-XXXXXX"
+  },
+
+  "metadata": {
+    "meta_author": "",
+    "meta_image": "/images/community/ghl-bangladesh-og.jpg",
+    "meta_image_width": "1200",
+    "meta_image_height": "630",
+    "meta_image_type": "image/jpeg",
+    "meta_image_alt": "GHL Bangladesh — HighLevel community in Bangladesh",
+    "meta_description": "Connect with the HighLevel community in Bangladesh. Learn through meetups and workshops with chapter leader Mehedi Sharif.",
+    "og_locale": "en_BD",
+    "theme_color": "#061d30"
+  }
+}

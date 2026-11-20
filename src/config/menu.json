@@ -1,0 +1,62 @@
+{
+  "main": [
+    {
+      "name": "Community",
+      "url": "/#community"
+    },
+    {
+      "name": "Events",
+      "url": "/#events"
+    },
+    {
+      "name": "Resources",
+      "url": "/resources"
+    },
+    {
+      "name": "Volunteers",
+      "url": "/volunteers"
+    }
+  ],
+  "footer": [
+    {
+      "title": "Find your way",
+      "links": [
+        {
+          "name": "Community",
+          "url": "/#community"
+        },
+        {
+          "name": "Events",
+          "url": "/#events"
+        },
+        {
+          "name": "Resources",
+          "url": "/resources"
+        }
+      ]
+    },
+    {
+      "title": "Let’s connect",
+      "links": [
+        {
+          "name": "Facebook community",
+          "url": "https://www.facebook.com/groups/highlevelbangladesh"
+        },
+        {
+          "name": "Volunteers",
+          "url": "/volunteers"
+        }
+      ]
+    }
+  ],
+  "legal": [
+    {
+      "name": "Privacy",
+      "url": "/privacy-policy"
+    },
+    {
+      "name": "Terms",
+      "url": "/terms-and-conditions"
+    }
+  ]
+}

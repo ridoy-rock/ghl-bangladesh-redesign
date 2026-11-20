@@ -1,0 +1,163 @@
+---
+import Button from "@/components/Button.astro";
+import Logo from "@/components/Logo.astro";
+import ThemeSwitcher from "@/components/ThemeSwitcher.astro";
+import config from "@/config/config.json";
+import menu from "@/config/menu.json";
+import { pagePath, withBase } from "@/lib/utils/url";
+
+export interface NavigationLink {
+  name: string;
+  url: string;
+}
+
+const { main }: { main: NavigationLink[] } = menu;
+const { navigation_button, settings, site } = config;
+
+// On the homepage, section links ("/#events") scroll within the page;
+// on every other page they lead back to the homepage section.
+const isHome = pagePath(Astro.url.pathname).replace(/\/+$/, "") === "";
+const linkTo = (url: string) =>
+  isHome && url.startsWith("/#") ? url.slice(1) : withBase(url);
+---
+
+<header
+  id="site-header"
+  class:list={["header", settings.sticky_header ? "fixed" : "absolute"]}
+>
+  <div
+    class="container grid grid-cols-[1fr_auto] items-center gap-6 min-[1001px]:grid-cols-[1fr_auto_1fr]"
+  >
+    <!-- logo: the header always sits on navy, so it uses the light logo in both themes -->
+    <Logo
+      class="justify-self-start"
+      imgClass="h-[38px] w-auto"
+      src={site.logo_darkmode}
+      srcDarkmode={site.logo_darkmode}
+      loading="eager"
+    />
+
+    <!-- desktop navigation -->
+    <nav
+      class="hidden gap-1 justify-self-center rounded-full border border-white/12 bg-white/7 p-1.25 min-[1001px]:flex"
+      aria-label="Main navigation"
+    >
+      {
+        main.map((item) => (
+          <a class="nav-link" href={linkTo(item.url)}>
+            {item.name}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="hidden items-center gap-5 justify-self-end min-[1001px]:flex">
+      <ThemeSwitcher />
+      {
+        navigation_button.enable && (
+          <Button
+            size="sm"
+            label={navigation_button.label}
+            href={navigation_button.link}
+          />
+        )
+      }
+    </div>
+
+    <!-- menu button (phones and tablets) -->
+    <button
+      class="menu-toggle grid size-[46px] cursor-pointer place-items-center justify-self-end rounded-full border border-white/12 bg-white/8 p-0 min-[1001px]:hidden"
+      type="button"
+      aria-expanded="false"
+      aria-controls="mobile-nav"
+      aria-label="Open navigation"
+    >
+      <span></span><span></span>
+    </button>
+  </div>
+
+  <!-- full-screen mobile navigation -->
+  <nav
+    id="mobile-nav"
+    class="bg-navy fixed inset-0 -z-1 flex flex-col gap-1.5 px-6 pt-[100px] pb-8"
+    aria-label="Mobile navigation"
+    hidden
+  >
+    {
+      main.map((item) => (
+        <a class="mobile-nav-link" href={linkTo(item.url)}>
+          {item.name}
+        </a>
+      ))
+    }
+    {
+      navigation_button.enable && (
+        <Button
+          class="mt-auto"
+          size="lg"
+          label={navigation_button.label}
+          href={navigation_button.link}
+        />
+      )
+    }
+  </nav>
+</header>
+
+<script>
+  const header = document.getElementById("site-header");
+  const toggle = header?.querySelector<HTMLButtonElement>(".menu-toggle");
+  const mobileNav = document.getElementById("mobile-nav");
+
+  if (header && toggle && mobileNav) {
+    let lastY = window.scrollY;
+    let ticking = false;
+
+    // frosted background after 40px; slide away when scrolling down past the hero,
+    // come back on the first scroll up
+    const paint = () => {
+      ticking = false;
+      const y = window.scrollY;
+      const menuOpen = !mobileNav.hidden;
+      header.classList.toggle("scrolled", menuOpen || y > 40);
+      if (menuOpen || y <= 500 || y < lastY - 4)
+        header.classList.remove("away");
+      else if (y > lastY + 4) header.classList.add("away");
+      lastY = y;
+    };
+
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(paint);
+      }
+    };
+
+    const setMenu = (open: boolean) => {
+      toggle.setAttribute("aria-expanded", String(open));
+      toggle.setAttribute(
+        "aria-label",
+        open ? "Close navigation" : "Open navigation",
+      );
+      mobileNav.hidden = !open;
+      document.body.style.overflow = open ? "hidden" : "";
+      header.classList.toggle("scrolled", open || window.scrollY > 40);
+      header.classList.toggle("menu-open", open);
+      if (open) header.classList.remove("away");
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+
+    toggle.addEventListener("click", () =>
+      setMenu(toggle.getAttribute("aria-expanded") !== "true"),
+    );
+    mobileNav
+      .querySelectorAll("a")
+      .forEach((link) => link.addEventListener("click", () => setMenu(false)));
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && !mobileNav.hidden) setMenu(false);
+    });
+
+    paint();
+  }
+</script>

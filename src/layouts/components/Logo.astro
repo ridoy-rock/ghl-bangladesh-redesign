@@ -1,0 +1,72 @@
+---
+import config from "@/config/config.json";
+import { withBase } from "@/lib/utils/url";
+
+interface Props {
+  src?: string;
+  srcDarkmode?: string;
+  class?: string;
+  imgClass?: string;
+  loading?: "eager" | "lazy";
+}
+
+const { logo, logo_darkmode, logo_width, logo_height, logo_text, title } =
+  config.site;
+
+const {
+  src = logo,
+  srcDarkmode = logo_darkmode,
+  class: className,
+  imgClass = "h-10 w-auto",
+  loading = "lazy",
+} = Astro.props;
+
+const width = Number(String(logo_width).replace("px", ""));
+const height = Number(String(logo_height).replace("px", ""));
+const alt = logo_text || title;
+
+// when both themes use the same file (the header always sits on navy) one image is enough
+const sameLogo = src === srcDarkmode;
+---
+
+<a
+  href={withBase("/")}
+  class:list={["navbar-brand", className]}
+  aria-label={`${alt} home`}
+>
+  {
+    src || srcDarkmode ? (
+      sameLogo ? (
+        <img
+          class={imgClass}
+          src={withBase(src)}
+          width={width}
+          height={height}
+          alt={alt}
+          loading={loading}
+        />
+      ) : (
+        <>
+          <img
+            class:list={[imgClass, "dark:hidden"]}
+            src={withBase(src)}
+            width={width}
+            height={height}
+            alt={alt}
+            loading={loading}
+          />
+          <img
+            class:list={[imgClass, "hidden dark:block"]}
+            src={withBase(srcDarkmode)}
+            width={width}
+            height={height}
+            alt={alt}
+            loading={loading}
+          />
+        </>
+      )
+    ) : (
+      alt
+    )
+  }
+</a>

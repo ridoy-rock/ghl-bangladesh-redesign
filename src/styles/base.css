@@ -1,0 +1,90 @@
+html {
+  @apply scroll-smooth scheme-light dark:scheme-dark;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  @apply bg-body font-primary text-text-dark dark:bg-darkmode-body dark:text-darkmode-text-dark overflow-x-hidden text-base leading-[1.65] font-normal antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  @apply font-secondary leading-[1.02] font-bold tracking-[-0.025em];
+}
+
+h1,
+.h1 {
+  @apply text-h1-sm md:text-h1;
+}
+
+h2,
+.h2 {
+  @apply text-h2-sm md:text-h2;
+}
+
+h3,
+.h3 {
+  @apply text-h3-sm md:text-h3;
+}
+
+h4,
+.h4 {
+  @apply text-h4;
+}
+
+h5,
+.h5 {
+  @apply text-h5;
+}
+
+h6,
+.h6 {
+  @apply text-h6;
+}
+
+b,
+strong {
+  @apply font-semibold;
+}
+
+code {
+  @apply after:border-none;
+}
+
+blockquote > p {
+  @apply my-0!;
+}
+
+button {
+  @apply cursor-pointer;
+}
+
+/* anchored sections stop below the fixed header */
+section {
+  @apply scroll-mt-[70px];
+}
+
+:focus-visible {
+  @apply outline-blue rounded-md outline-3 outline-offset-3;
+}
+
+::selection {
+  @apply bg-green text-[#03210f];
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

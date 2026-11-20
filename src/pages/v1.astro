@@ -1,0 +1,22 @@
+---
+import config from "@/config/config.json";
+import { withBase } from "@/lib/utils/url";
+
+// Before the Astro conversion this design lived at /v1/. Old links land here
+// and are sent on to the homepage (inside the site folder, wherever it is served).
+const home = withBase("/");
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Redirecting to the homepage</title>
+    <meta http-equiv="refresh" content={`0;url=${home}`} />
+    <meta name="robots" content="noindex" />
+    <link rel="canonical" href={config.site.base_url + "/"} />
+  </head>
+  <body>
+    <a href={home}>GHL Bangladesh homepage</a>
+  </body>
+</html>

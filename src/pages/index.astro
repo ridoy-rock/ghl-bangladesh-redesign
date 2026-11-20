@@ -1,0 +1,29 @@
+---
+import Base from "@/layouts/Base.astro";
+import { getListPage } from "@/lib/contentParser.astro";
+import AudienceStrip from "@/partials/AudienceStrip.astro";
+import Banner from "@/partials/Banner.astro";
+import CallToAction from "@/partials/CallToAction.astro";
+import ChapterLeader from "@/partials/ChapterLeader.astro";
+import Community from "@/partials/Community.astro";
+import EventGallery from "@/partials/EventGallery.astro";
+import Story from "@/partials/Story.astro";
+
+// All text and image paths come from the content files:
+// src/content/homepage/-index.md and src/content/sections/call-to-action.md
+const homepage = await getListPage("homepage", "-index");
+const call_to_action = await getListPage("ctaSection", "call-to-action");
+
+const { banner, audience, community, events, story, chapter_leader } =
+  homepage.data;
+---
+
+<Base>
+  <Banner banner={banner} />
+  <AudienceStrip audience={audience} />
+  <Community community={community} />
+  <EventGallery events={events} />
+  <Story story={story} />
+  <ChapterLeader chapter_leader={chapter_leader} />
+  <CallToAction call_to_action={call_to_action} />
+</Base>

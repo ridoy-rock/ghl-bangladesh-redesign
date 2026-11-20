@@ -1,0 +1,12 @@
+/* Styles for elements that only exist after a script has run, so they never
+   appear in the templates. */
+
+/* story text: every word is wrapped in .w and lights up as the reader scrolls */
+.js .story-content.words .w {
+  opacity: 0.25;
+  transition: opacity 0.5s ease;
+}
+
+.js .story-content.words .w.on {
+  opacity: 1;
+}

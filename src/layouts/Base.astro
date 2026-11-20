@@ -1,0 +1,208 @@
+---
+import ScrollProgress from "@/components/ScrollProgress.astro";
+import TwSizeIndicator from "@/components/TwSizeIndicator.astro";
+import config from "@/config/config.json";
+import theme from "@/config/theme.json";
+import { plainify } from "@/lib/utils/textConverter";
+import { pagePath, withBase } from "@/lib/utils/url";
+import Footer from "@/partials/Footer.astro";
+import Header from "@/partials/Header.astro";
+import "@/styles/main.css";
+import {
+  GoogleTagmanager,
+  GoogleTagmanagerNoscript,
+} from "@digi4care/astro-google-tagmanager";
+import { Font } from "astro:assets";
+
+// font families - extract font names for Font component (filter out type keys)
+const fontEntries = Object.entries(theme.fonts.font_family).filter(
+  ([key]) => !key.includes("_type"),
+);
+
+// A family that theme.json uses for more than one role (here: body and headings)
+// is loaded once; the other roles simply point at it.
+const firstRole = (font: string) =>
+  fontEntries.find(([, value]) => value === font)![0];
+const loadedFonts = fontEntries.filter(
+  ([key, font]) => firstRole(font) === key,
+);
+const fontAliases = fontEntries
+  .filter(([key, font]) => firstRole(font) !== key)
+  .map(([key, font]) => `--font-${key}:var(--font-${firstRole(font)})`)
+  .join(";");
+
+// types for frontmatters
+export interface Props {
+  title?: string;
+  meta_title?: string;
+  description?: string;
+  image?: string;
+  noindex?: boolean;
+  canonical?: string;
+}
+
+// destructure frontmatter
+const { title, meta_title, description, image, noindex, canonical } =
+  Astro.props;
+
+const { site, metadata, settings } = config;
+
+const pageTitle = plainify(
+  meta_title ? meta_title : title ? title : site.title,
+).trim();
+const pageDescription = plainify(
+  description ? description : metadata.meta_description,
+).trim();
+
+// Canonical and social links always use the real domain from config.json,
+// also when a preview is deployed somewhere else.
+const pageUrl = new URL(pagePath(Astro.url.pathname), site.base_url).href;
+const pageImage = new URL(image ? image : metadata.meta_image, site.base_url)
+  .href;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- google tag manager -->
+    {
+      config.google_tag_manager.enable && (
+        <GoogleTagmanager id={config.google_tag_manager.gtm_id} />
+      )
+    }
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <!-- responsive meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- favicon -->
+    <link rel="icon" href={withBase(site.favicon)} type="image/svg+xml" />
+
+    <!-- theme meta -->
+    <meta name="theme-name" content="astroplate" />
+    <meta name="theme-color" content={metadata.theme_color} />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Marks the page as script-enabled and picks light or dark before the first paint.
+         "system" in config.json follows the visitor's device; "light" or "dark" fixes it. -->
+    <script is:inline define:vars={{ defaultTheme: settings.default_theme }}>
+      (function () {
+        var root = document.documentElement;
+        root.classList.add("js");
+        var stored = null;
+        try {
+          stored = localStorage.getItem("theme");
+        } catch (e) {}
+        var system = window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light";
+        var current =
+          stored || (defaultTheme === "system" ? system : defaultTheme);
+        root.classList.toggle("dark", current === "dark");
+      })();
+    </script>
+
+    <!-- google font css - Astro built-in Font API -->
+    {
+      loadedFonts.map(([key]) => {
+        const cssVar = `--font-${key}` as any;
+        return <Font cssVariable={cssVar} preload />;
+      })
+    }
+    {fontAliases && <style is:inline set:html={`:root{${fontAliases}}`} />}
+
+    <!-- title -->
+    <title>{pageTitle}</title>
+
+    <!-- canonical url -->
+    <link rel="canonical" href={canonical ? canonical : pageUrl} />
+
+    <!-- noindex robots -->
+    {noindex && <meta name="robots" content="noindex,nofollow" />}
+
+    <!-- meta-description -->
+    <meta name="description" content={pageDescription} />
+
+    <!-- author from config.json -->
+    {
+      metadata.meta_author && (
+        <meta name="author" content={metadata.meta_author} />
+      )
+    }
+
+    <!-- open graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content={metadata.og_locale} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:url" content={pageUrl} />
+    <meta property="og:image" content={pageImage} />
+    {
+      !image && (
+        <>
+          <meta property="og:image:width" content={metadata.meta_image_width} />
+          <meta
+            property="og:image:height"
+            content={metadata.meta_image_height}
+          />
+          <meta property="og:image:type" content={metadata.meta_image_type} />
+          <meta property="og:image:alt" content={metadata.meta_image_alt} />
+        </>
+      )
+    }
+
+    <!-- twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDescription} />
+    <meta name="twitter:image" content={pageImage} />
+    {
+      !image && (
+        <meta name="twitter:image:alt" content={metadata.meta_image_alt} />
+      )
+    }
+  </head>
+  <body class="flex min-h-screen flex-col">
+    {/* google tag manager noscript */}
+    {
+      config.google_tag_manager.enable && (
+        <GoogleTagmanagerNoscript id={config.google_tag_manager.gtm_id} />
+      )
+    }
+    <a
+      class="bg-yellow text-navy absolute -top-[60px] left-4 z-100 rounded-[10px] px-4 py-2.5 font-semibold no-underline focus:top-3 focus-visible:rounded-md"
+      href="#main"
+    >
+      Skip to content
+    </a>
+    <ScrollProgress />
+    <Header />
+    <main class="grow" id="main">
+      <slot />
+    </main>
+    <Footer />
+    <TwSizeIndicator />
+
+    <script>
+      // Scroll reveal: anything with the class "reveal" fades up once it enters the screen.
+      const targets = document.querySelectorAll(".reveal");
+
+      if ("IntersectionObserver" in window) {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("in");
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          { rootMargin: "0px 0px -8% 0px", threshold: 0.08 },
+        );
+        targets.forEach((el) => observer.observe(el));
+      } else {
+        targets.forEach((el) => el.classList.add("in"));
+      }
+    </script>
+  </body>
+</html>

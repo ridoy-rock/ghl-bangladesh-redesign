@@ -1,0 +1,89 @@
+/* header: clear over the hero, frosted navy once the page scrolls,
+   tucked away while scrolling down and back as soon as you scroll up */
+.header {
+  @apply inset-x-0 top-0 z-50 py-4.5;
+  transition:
+    background 0.3s ease,
+    box-shadow 0.3s ease,
+    padding 0.3s ease,
+    transform 0.45s var(--ease-soft);
+}
+
+.header.scrolled {
+  @apply bg-navy/82 py-2.5 shadow-[0_1px_0_rgb(255_255_255/0.12)] backdrop-blur-[16px] backdrop-saturate-[1.4];
+}
+
+.header.away {
+  transform: translateY(-110%);
+}
+
+/* The open mobile menu is a fixed child of the header. A backdrop filter or a
+   transform on the header would shrink it to the header box, so both are off. */
+.header.menu-open {
+  @apply bg-navy;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  transform: none;
+}
+
+.navbar-brand {
+  @apply text-xl font-semibold text-white;
+}
+
+/* desktop links */
+.nav-link {
+  @apply text-on-dark rounded-full px-4 py-2 text-[14.5px] font-medium no-underline;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+
+.nav-link:hover {
+  @apply bg-white/14;
+}
+
+/* two-line menu button that folds into a cross */
+.menu-toggle span {
+  @apply block h-0.5 w-4.5 rounded-xs bg-white;
+  transition: transform 0.3s;
+}
+
+.menu-toggle span + span {
+  @apply mt-1.25;
+}
+
+.menu-toggle[aria-expanded="true"] span:first-child {
+  transform: translateY(3.5px) rotate(45deg);
+}
+
+.menu-toggle[aria-expanded="true"] span:last-child {
+  transform: translateY(-3.5px) rotate(-45deg);
+}
+
+/* mobile links */
+.mobile-nav-link {
+  @apply font-secondary border-b border-white/12 py-1.5 text-[length:clamp(32px,9vw,44px)] font-bold text-white no-underline;
+}
+
+/* theme-switcher (shown when settings.theme_switcher is on in config.json) */
+.theme-switcher {
+  @apply inline-flex;
+
+  label {
+    @apply relative inline-block h-4 w-6 cursor-pointer rounded-2xl bg-white/20 lg:w-10;
+  }
+
+  input {
+    @apply absolute opacity-0;
+  }
+
+  span {
+    @apply absolute -top-1 left-0 flex h-6 w-6 items-center justify-center rounded-full bg-white transition-all duration-300;
+  }
+
+  input:checked + label {
+    span {
+      @apply lg:left-4;
+    }
+  }
+}

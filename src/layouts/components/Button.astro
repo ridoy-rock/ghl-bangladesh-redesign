@@ -1,0 +1,78 @@
+---
+import { isExternal, withBase } from "@/lib/utils/url";
+
+// One button for the whole site: a label plus a round icon chip.
+// Styles live in src/styles/buttons.css.
+interface Props {
+  label: string;
+  href?: string;
+  variant?: "green" | "ghost" | "outline";
+  size?: "sm" | "md" | "lg";
+  icon?: "ne" | "down" | "left" | "right" | "x";
+  iconFirst?: boolean;
+  glyph?: string;
+  class?: string;
+  [attribute: string]: any;
+}
+
+const {
+  label,
+  href,
+  variant = "green",
+  size = "md",
+  icon = "ne",
+  iconFirst = false,
+  glyph,
+  class: className,
+  ...attrs
+} = Astro.props;
+
+const icons = {
+  ne: "M4.5 11.5 11.5 4.5M5.5 4.5h6v6",
+  down: "M8 3.5v9M4 8.5l4 4 4-4",
+  left: "M12.5 8h-9M7.5 4l-4 4 4 4",
+  right: "M3.5 8h9M8.5 4l4 4-4 4",
+  x: "M4.5 4.5l7 7M11.5 4.5l-7 7",
+};
+
+const Tag = href ? "a" : "button";
+const external = href ? isExternal(href) : false;
+// the icon is drawn twice so one copy can slide out while the other slides in;
+// the close cross simply turns, so it needs one copy
+const copies = icon === "x" ? [0] : [0, 1];
+---
+
+<Tag
+  class:list={[
+    "btn",
+    size !== "md" && `btn-${size}`,
+    `btn-${variant}`,
+    iconFirst && "chip-first",
+    className,
+  ]}
+  href={href ? withBase(href) : undefined}
+  target={external ? "_blank" : undefined}
+  rel={external ? "noopener noreferrer" : undefined}
+  type={href ? undefined : "button"}
+  {...attrs}
+>
+  {!iconFirst && <span class="btn-label">{label}</span>}
+  <span class:list={["btn-chip", icon]} aria-hidden="true">
+    {glyph && <span class="glyph">{glyph}</span>}
+    {
+      copies.map(() => (
+        <svg
+          viewBox="0 0 16 16"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d={icons[icon]} />
+        </svg>
+      ))
+    }
+  </span>
+  {iconFirst && <span class="btn-label">{label}</span>}
+</Tag>

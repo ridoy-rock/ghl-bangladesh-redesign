@@ -1,0 +1,261 @@
+---
+import Button from "@/components/Button.astro";
+import { highlight } from "@/lib/utils/textConverter";
+import { withBase } from "@/lib/utils/url";
+
+const { events } = Astro.props;
+const { gallery } = events;
+
+interface Photo {
+  image: string;
+  image_large: string;
+  caption: string;
+  alt: string;
+  size?: "big" | "wide" | "tall";
+  width: number;
+  height: number;
+}
+
+// how many grid cells a photo takes
+const sizes = {
+  big: "col-span-2 row-span-2",
+  wide: "min-[901px]:col-span-2",
+  tall: "row-span-2",
+};
+---
+
+<section
+  class="section bg-navy text-on-dark relative overflow-hidden before:pointer-events-none before:absolute before:top-[-30%] before:left-[-20%] before:h-[80%] before:w-[70%] before:bg-[radial-gradient(closest-side,rgb(11_206_85/0.16),transparent)]"
+  id="events"
+  aria-labelledby="recap-heading"
+>
+  <div class="container">
+    <div class="reveal relative mb-[clamp(40px,5vw,64px)] text-center">
+      <span class="kicker kicker-center text-on-dark/72">{events.kicker}</span>
+      <h2
+        id="recap-heading"
+        class="mt-4.5 text-[length:clamp(34px,7.2vw,84px)]"
+        set:html={highlight(events.title)}
+      />
+    </div>
+
+    <div
+      id="meetup-gallery"
+      role="group"
+      aria-label={`${gallery.title} photo gallery`}
+    >
+      <div
+        class="relative grid grid-flow-dense auto-rows-[clamp(110px,28vw,220px)] grid-cols-2 gap-2 min-[901px]:auto-rows-[clamp(150px,15vw,220px)] min-[901px]:grid-cols-4 min-[901px]:gap-3"
+        data-gallery
+      >
+        {
+          gallery.photos.map((photo: Photo) => (
+            <figure
+              class:list={[
+                "gallery-item reveal bg-navy-2 relative overflow-hidden rounded-[14px]",
+                photo.size && sizes[photo.size],
+              ]}
+            >
+              <a
+                class="gallery-photo"
+                href={withBase(photo.image_large)}
+                data-event-photo
+                data-caption={photo.caption}
+                aria-label={`Enlarge photo: ${photo.alt}`}
+                aria-controls="meetup-photo-dialog"
+                aria-haspopup="dialog"
+              >
+                <img
+                  src={withBase(photo.image)}
+                  srcset={`${withBase(photo.image)} 1200w, ${withBase(photo.image_large)} 1800w`}
+                  sizes="(max-width:900px) 50vw, 25vw"
+                  width={photo.width}
+                  height={photo.height}
+                  alt={photo.alt}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+            </figure>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- full-screen photo viewer -->
+<dialog
+  class="m-0 h-dvh max-h-none w-screen max-w-none grid-rows-[auto_1fr_auto] border-0 bg-[rgb(3_14_24/0.94)] p-0 text-white backdrop:bg-[rgb(3_14_24/0.6)] backdrop:backdrop-blur-[6px] open:grid"
+  id="meetup-photo-dialog"
+  aria-labelledby="meetup-photo-dialog-title"
+>
+  <div
+    class="flex items-center justify-between gap-4 px-[clamp(16px,3vw,32px)] py-4"
+  >
+    <h3
+      id="meetup-photo-dialog-title"
+      class="text-[20px] font-semibold tracking-[-0.01em]"
+    >
+      {gallery.title}<span
+        class="font-primary text-on-dark/72 ml-3 text-[14px] font-medium"
+        id="dlg-count"></span>
+    </h3>
+    <Button
+      class="flex-none"
+      variant="ghost"
+      size="sm"
+      icon="x"
+      label="Close"
+      aria-label="Close photo viewer"
+      data-dialog-close
+      autofocus
+    />
+  </div>
+
+  <!-- the photo is positioned against the stage, so it can never grow over the caption or the buttons -->
+  <div
+    class="relative grid min-h-0 place-items-center overflow-hidden px-[clamp(8px,6vw,96px)]"
+    data-dialog-stage
+  >
+    <img
+      id="dlg-img"
+      class="absolute inset-x-[clamp(8px,6vw,96px)] inset-y-0 m-auto max-h-full max-w-[calc(100%-2*clamp(8px,6vw,96px))] rounded-[10px] object-contain shadow-[0_30px_80px_rgb(0_0_0/0.5)]"
+      src={withBase(gallery.photos[0].image)}
+      alt={gallery.photo_alt}
+    />
+  </div>
+
+  <div
+    class="flex flex-col items-stretch justify-between gap-4 px-[clamp(16px,3vw,32px)] pt-4 pb-5.5 min-[601px]:flex-row min-[601px]:items-center"
+  >
+    <p class="text-on-dark text-[16px]" id="dlg-caption"></p>
+    <div class="flex gap-2 max-[601px]:justify-between">
+      <Button
+        class="flex-none"
+        variant="ghost"
+        size="sm"
+        icon="left"
+        iconFirst
+        label="Previous"
+        aria-label="Previous photo"
+        data-dialog-previous
+      />
+      <Button
+        class="flex-none"
+        variant="ghost"
+        size="sm"
+        icon="right"
+        label="Next"
+        aria-label="Next photo"
+        data-dialog-next
+      />
+    </div>
+  </div>
+</dialog>
+
+<!-- green disc that follows the mouse over the gallery -->
+<div
+  class="bg-green font-primary pointer-events-none fixed top-0 left-0 z-40 -mt-[42px] -ml-[42px] hidden size-[84px] [transform:translate3d(var(--x,-200px),var(--y,-200px),0)_scale(var(--s,0))] place-items-center rounded-full text-[14px] leading-normal font-semibold text-[#03210f] transition-transform duration-[180ms] ease-[ease-out] will-change-transform [.has-cursor_&]:grid"
+  aria-hidden="true"
+  data-cursor-view
+>
+  View
+</div>
+
+<script>
+  const root = document.documentElement;
+  const grid = document.querySelector<HTMLElement>("[data-gallery]");
+  const cursor = document.querySelector<HTMLElement>("[data-cursor-view]");
+  const reduceMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+  const finePointer = window.matchMedia(
+    "(hover:hover) and (pointer:fine)",
+  ).matches;
+
+  // "View" disc: mouse users only
+  if (grid && cursor && !reduceMotion && finePointer) {
+    root.classList.add("has-cursor");
+    grid.addEventListener("mousemove", (event) => {
+      const overPhoto = (event.target as Element).closest("[data-event-photo]");
+      cursor.style.setProperty("--x", event.clientX + "px");
+      cursor.style.setProperty("--y", event.clientY + "px");
+      cursor.style.setProperty("--s", overPhoto ? "1" : "0");
+    });
+    grid.addEventListener("mouseleave", () =>
+      cursor.style.setProperty("--s", "0"),
+    );
+    window.addEventListener(
+      "scroll",
+      () => cursor.style.setProperty("--s", "0"),
+      { passive: true },
+    );
+  }
+
+  // Photo viewer. Without scripts each photo simply opens as a normal link.
+  const links = Array.from(
+    document.querySelectorAll<HTMLAnchorElement>("[data-event-photo]"),
+  );
+  const dialog = document.getElementById(
+    "meetup-photo-dialog",
+  ) as HTMLDialogElement | null;
+  const image = document.getElementById("dlg-img") as HTMLImageElement | null;
+  const caption = document.getElementById("dlg-caption");
+  const count = document.getElementById("dlg-count");
+
+  if (
+    dialog &&
+    typeof dialog.showModal === "function" &&
+    image &&
+    caption &&
+    count
+  ) {
+    let current = 0;
+    let lastOpened: HTMLAnchorElement | null = null;
+
+    const show = (index: number) => {
+      current = (index + links.length) % links.length;
+      const link = links[current];
+      image.src = link.getAttribute("href") || "";
+      image.alt = link.querySelector("img")?.alt || "";
+      caption.textContent = link.dataset.caption || "";
+      count.textContent = `${current + 1} / ${links.length}`;
+    };
+
+    links.forEach((link, index) => {
+      link.addEventListener("click", (event) => {
+        event.preventDefault();
+        lastOpened = link;
+        show(index);
+        dialog.showModal();
+      });
+    });
+
+    dialog
+      .querySelector("[data-dialog-close]")
+      ?.addEventListener("click", () => dialog.close());
+    dialog
+      .querySelector("[data-dialog-previous]")
+      ?.addEventListener("click", () => show(current - 1));
+    dialog
+      .querySelector("[data-dialog-next]")
+      ?.addEventListener("click", () => show(current + 1));
+
+    dialog.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowLeft") show(current - 1);
+      if (event.key === "ArrowRight") show(current + 1);
+    });
+
+    // a click on the dark area around the photo closes the viewer
+    dialog.addEventListener("click", (event) => {
+      const target = event.target as HTMLElement;
+      if (target === dialog || target.hasAttribute("data-dialog-stage")) {
+        dialog.close();
+      }
+    });
+
+    // give focus back to the photo that opened the viewer
+    dialog.addEventListener("close", () => lastOpened?.focus());
+  }
+</script>
