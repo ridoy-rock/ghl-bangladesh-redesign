@@ -255,9 +255,4 @@ export const members: Member[] = [
 // has no photo, name or role. Replace them with real members (add those to
 // `members` above) and then delete this list; never send it to the standard
 // repository (mehedi-sharif/ghlbangladesh).
-export const sampleMembers: Member[] = Array.from({ length: 18 }, () => ({
-  name: "Member name",
-  role: "Role",
-  about: "A sentence or two about what this member does.",
-  sample: true,
-}));
+export const sampleMembers: Member[] = [];
