@@ -209,8 +209,6 @@ export const volunteerRoles = [
 //   <name>-640.webp, <name>-1200.webp and <name>-1800.webp; alt describes it
 // - focus: which part of the photo stays in the portrait crop (CSS
 //   object-position, e.g. "62% center"; the first value moves left/right)
-// - links: facebook and website, both optional
-// - certified: true shows the HighLevel Certified Admin badge on the photo
 export type Member = {
   name: string;
   role: string;
@@ -218,8 +216,6 @@ export type Member = {
   photo?: string;
   alt?: string;
   focus?: string;
-  links?: { facebook?: string; website?: string };
-  certified?: boolean;
   // placeholder card without a real person (see sampleMembers below)
   sample?: boolean;
 };
@@ -232,11 +228,6 @@ export const members: Member[] = [
     photo: "mehedi-portrait",
     alt: "Mehedi Sharif holding a microphone beside the GHL Bangladesh meetup banner",
     focus: "46% center",
-    links: {
-      facebook: "https://www.facebook.com/mehedi.sharif.titas",
-      website: "https://mehedisharif.com",
-    },
-    certified: true,
   },
   {
     name: "Shariful Islam",
@@ -245,9 +236,6 @@ export const members: Member[] = [
     photo: "dsc08543",
     alt: "Shariful Islam speaking into a microphone at the GHL Bangladesh meetup",
     focus: "62% center",
-    links: {
-      facebook: "https://www.facebook.com/vidmshariful",
-    },
   },
 ];
 // SAMPLE CARDS, NOT REAL PEOPLE: placeholders the user asked for so the Members

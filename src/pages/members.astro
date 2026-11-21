@@ -42,14 +42,6 @@ const span2 = 2 - (people.length % 2);
           added here.
         </p>
       </div>
-      {
-        sampleMembers.length > 0 && (
-          <p class="members-sample-note reveal">
-            Cards marked “Sample” are placeholders for members still to be
-            added.
-          </p>
-        )
-      }
 
       <ul class="members-grid" role="list">
         {
@@ -131,15 +123,6 @@ const span2 = 2 - (people.length % 2);
     color: var(--ink-2);
   }
 
-  .members-sample-note {
-    display: inline-block;
-    margin: 28px 0 0;
-    padding: 8px 14px;
-    border-radius: 999px;
-    border: 1px dashed color-mix(in srgb, var(--ink) 30%, transparent);
-    color: var(--ink-2);
-    font-size: 14px;
-  }
   .members-grid {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -180,7 +163,7 @@ const span2 = 2 - (people.length % 2);
   }
   .seat-frame {
     position: relative;
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 1;
     overflow: hidden;
     border-radius: var(--radius);
     background: var(--paper-2);

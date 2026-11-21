@@ -1,8 +1,6 @@
 ---
-// One member of GHL Bangladesh as a card: portrait photo with the role on a
-// frosted label, name, what they do, and round links to Facebook and the
-// member's website. Members marked `certified` carry the HighLevel Certified
-// Admin badge on the corner of their photo. Data: `members` in
+// One member of GHL Bangladesh as a card: a square photo with the role on a
+// frosted label, the name and what they do. Data: `members` in
 // src/data/community.ts; page: src/pages/members.astro.
 // Sample cards (`sample: true`) show an outline of a person instead of a photo
 // and a "Sample" label, so they can never pass for a real member.
@@ -18,24 +16,8 @@ interface Props {
 }
 
 const { member, accent = "green", uid } = Astro.props;
-const {
-  name,
-  role,
-  about,
-  photo,
-  alt = "",
-  focus,
-  links = {},
-  certified,
-  sample,
-} = member;
+const { name, role, about, photo, alt = "", focus, sample } = member;
 const id = uid ?? `member-${name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
-
-// The "f" of the official Facebook logo (Simple Icons, CC0), as in Button.astro
-const facebookF =
-  "M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245Z";
-const globe =
-  "M14.25 8A6.25 6.25 0 1 1 1.75 8a6.25 6.25 0 0 1 12.5 0ZM1.75 8h12.5M8 1.75c1.7 1.75 2.55 3.83 2.55 6.25S9.7 12.5 8 14.25C6.3 12.5 5.45 10.42 5.45 8S6.3 3.5 8 1.75Z";
 ---
 
 <article
@@ -69,66 +51,10 @@ const globe =
     <span class="member-role"
       ><span class="member-dot" aria-hidden="true"></span>{role}</span
     >
-    {
-      certified && (
-        <img
-          class="member-badge"
-          src="/images/community/highlevel-certified-admin.webp"
-          width="640"
-          height="789"
-          alt="HighLevel Certified Admin badge"
-          title="HighLevel Certified Admin"
-          loading="lazy"
-          decoding="async"
-        />
-      )
-    }
   </div>
   <div class="member-body">
     <h3 class="member-name" id={id}>{name}</h3>
     <p class="member-about">{about}</p>
-    {
-      (links.facebook || links.website) && (
-        <div class="member-links">
-          {links.facebook && (
-            <a
-              class="member-link facebook"
-              href={links.facebook}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`${name} on Facebook (opens in a new tab)`}
-              title="Facebook"
-            >
-              <svg viewBox="6.6 4.4 11 19.6" aria-hidden="true">
-                <path fill="currentColor" d={facebookF} />
-              </svg>
-            </a>
-          )}
-          {links.website && (
-            <a
-              class="member-link website"
-              href={links.website}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`${name}’s website (opens in a new tab)`}
-              title="Website"
-            >
-              <svg
-                viewBox="0 0 16 16"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-              >
-                <path d={globe} />
-              </svg>
-            </a>
-          )}
-        </div>
-      )
-    }
   </div>
 </article>
 
@@ -161,7 +87,7 @@ const globe =
   }
   .member-photo {
     position: relative;
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 1;
     overflow: hidden;
     border-radius: var(--radius);
     background: var(--navy-2);
@@ -249,20 +175,6 @@ const globe =
     box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 28%, transparent);
   }
 
-  /* the certification badge hangs on the corner of the photo like a medal */
-  .member-badge {
-    position: absolute;
-    z-index: 2;
-    top: -18px;
-    right: -14px;
-    width: clamp(92px, 8vw, 112px);
-    height: auto;
-    transform: rotate(9deg);
-    transform-origin: 50% 12%;
-    filter: drop-shadow(0 12px 18px rgba(6, 29, 48, 0.35));
-    transition: transform 0.7s var(--ease);
-  }
-
   .member-body {
     flex: 1;
     display: flex;
@@ -285,46 +197,6 @@ const globe =
     line-height: 1.6;
   }
 
-  /* round links along the foot of the card */
-  .member-links {
-    display: flex;
-    gap: 10px;
-    margin-top: auto;
-    padding-top: 22px;
-  }
-  .member-link {
-    display: grid;
-    place-items: center;
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    transition:
-      background-color 0.25s ease,
-      color 0.25s ease,
-      box-shadow 0.25s ease,
-      transform 0.25s var(--ease);
-  }
-  .member-link svg {
-    width: 17px;
-    height: 17px;
-  }
-  .member-link.facebook {
-    background: #0866ff;
-    color: #fff;
-  }
-  .member-link.facebook svg {
-    width: 18px;
-    height: 18px;
-  }
-  .member-link.website {
-    color: var(--ink);
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 24%, transparent);
-  }
-  .member-link:focus-visible {
-    outline: 2px solid var(--blue);
-    outline-offset: 3px;
-  }
-
   @media (hover: hover) {
     .member-card:hover {
       transform: translateY(-6px);
@@ -333,22 +205,11 @@ const globe =
     .member-card:hover .member-photo :global(img) {
       transform: scale(1.04);
     }
-    .member-card:hover .member-badge {
-      transform: rotate(-3deg);
-    }
-    .member-link:hover {
-      transform: translateY(-2px);
-    }
-    .member-link.website:hover {
-      background: var(--green);
-      color: #04240f;
-      box-shadow: none;
-    }
   }
   :global(:root[data-theme="dark"]) .member-card {
     box-shadow: none;
   }
-  /* two cards per row on phones: smaller type, labels and links */
+  /* two cards per row on phones: smaller type and labels */
   @media (max-width: 599px) {
     .member-card {
       padding: 5px;
@@ -375,11 +236,6 @@ const globe =
       padding: 3px 7px;
       font-size: 10px;
     }
-    .member-badge {
-      top: -10px;
-      right: -8px;
-      width: 62px;
-    }
     .member-body {
       padding: 12px 8px 8px;
     }
@@ -391,19 +247,10 @@ const globe =
       font-size: 13.5px;
       line-height: 1.5;
     }
-    .member-links {
-      gap: 8px;
-      padding-top: 14px;
-    }
-    .member-link {
-      width: 36px;
-      height: 36px;
-    }
   }
   @media (prefers-reduced-motion: reduce) {
     .member-card,
-    .member-photo :global(img),
-    .member-badge {
+    .member-photo :global(img) {
       transition: none;
     }
   }
