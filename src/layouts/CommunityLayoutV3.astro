@@ -12,13 +12,19 @@ const {
   title = "HighLevel Bangladesh | Community, Meetups & Workshops",
   description = "Connect with the HighLevel community in Bangladesh. Learn through meetups and workshops with chapter leader Mehedi Sharif.",
 } = Astro.props;
+// On the v3 homepage the sections are anchors; the other v3 pages link back to them.
+const path = Astro.url.pathname.replace(/\/+$/, "");
+const home = path === "/v3";
+const section = (id: string) => (home ? `#${id}` : `/v3#${id}`);
 const nav = [
-  ["Community", "#community"],
-  ["Events", "#events"],
-  ["Photos", "#gallery"],
-  ["Our story", "#our-story"],
-  ["Volunteer", "#volunteer"],
+  ["Community", section("community")],
+  ["Events", section("events")],
+  ["Photos", section("gallery")],
+  ["Our story", section("our-story")],
+  ["Resources", "/v3/resources"],
+  ["Volunteer", "/v3/volunteers"],
 ];
+const current = (href: string) => (href === path ? "page" : undefined);
 const canonical = new URL(Astro.url.pathname, "https://ghlbangladesh.com");
 const socialImage =
   "https://ghlbangladesh.com/images/community/ghl-bangladesh-og.jpg";
@@ -100,8 +106,10 @@ const socialImageAlt = "GHL Bangladesh — HighLevel community in Bangladesh";
       <div class="v3-wrap v3-header-inner">
         <a
           class="v3-brand"
-          href="#main"
-          aria-label="GHL Bangladesh, back to top"
+          href={home ? "#main" : "/v3"}
+          aria-label={home
+            ? "GHL Bangladesh, back to top"
+            : "GHL Bangladesh home"}
           ><img
             class="logo-on-dark"
             src="/images/community/chapter-logo.svg"
@@ -119,7 +127,13 @@ const socialImageAlt = "GHL Bangladesh — HighLevel community in Bangladesh";
           /></a
         >
         <nav class="v3-nav" aria-label="Main navigation">
-          {nav.map(([label, href]) => <a href={href}>{label}</a>)}
+          {
+            nav.map(([label, href]) => (
+              <a href={href} aria-current={current(href)}>
+                {label}
+              </a>
+            ))
+          }
         </nav>
         <button
           class="v3-theme"
@@ -173,7 +187,7 @@ const socialImageAlt = "GHL Bangladesh — HighLevel community in Bangladesh";
           {
             nav.map(([label, href], index) => (
               <li>
-                <a href={href}>
+                <a href={href} aria-current={current(href)}>
                   <span class="v3-mobile-index" aria-hidden="true">
                     {String(index + 1).padStart(2, "0")}
                   </span>
@@ -263,7 +277,7 @@ const socialImageAlt = "GHL Bangladesh — HighLevel community in Bangladesh";
           toggle.focus();
         }
       });
-      matchMedia("(min-width: 1001px)").addEventListener("change", (event) => {
+      matchMedia("(min-width: 1121px)").addEventListener("change", (event) => {
         if (event.matches) setMenu(false);
       });
 
@@ -627,6 +641,10 @@ const socialImageAlt = "GHL Bangladesh — HighLevel community in Bangladesh";
       color 0.2s,
       background-color 0.2s;
   }
+  .v3-nav a[aria-current="page"] {
+    color: var(--text);
+    background: var(--tint-2);
+  }
   .v3-nav a:hover {
     color: var(--text);
     background: var(--tint-2);
@@ -675,7 +693,7 @@ const socialImageAlt = "GHL Bangladesh — HighLevel community in Bangladesh";
   .v3-mobile-nav {
     display: none;
   }
-  @media (max-width: 1000px) {
+  @media (max-width: 1120px) {
     .v3-nav,
     .v3-header-join {
       display: none !important;
