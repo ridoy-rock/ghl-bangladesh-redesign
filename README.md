@@ -9,6 +9,7 @@ The community website for people in Bangladesh building with HighLevel—connect
 - Responsive homepage with a community meetup video and locally hosted fonts.
 - Event photo gallery with an accessible photo viewer and keyboard navigation.
 - Community story and chapter-leader introduction.
+- Members page with confirmed profiles and links to their public accounts.
 - HighLevel learning resources and volunteer opportunity updates.
 - Logo-based favicons for browser tabs and Apple home screens.
 
@@ -29,25 +30,25 @@ npm run dev
 
 Open the local URL printed in the terminal (normally `http://localhost:4321`). Astro selects another port if that port is occupied.
 
-| Command | Purpose |
-| --- | --- |
-| `npm run dev` | Start the local development server |
-| `npm run check` | Run Astro and TypeScript diagnostics |
-| `npm run build` | Generate the production site in `dist/` |
-| `npm run preview` | Preview the production build locally |
+| Command           | Purpose                                 |
+| ----------------- | --------------------------------------- |
+| `npm run dev`     | Start the local development server      |
+| `npm run check`   | Run Astro and TypeScript diagnostics    |
+| `npm run build`   | Generate the production site in `dist/` |
+| `npm run preview` | Preview the production build locally    |
 
 ## Project structure
 
-| Path | Contents |
-| --- | --- |
-| `src/pages/` | Homepage, resources, volunteers, and other routes |
-| `src/components/community/` | Shared community sections, gallery, logo, and buttons |
-| `src/layouts/CommunityLayout.astro` | Navigation, metadata, favicon links, and page layout |
-| `src/styles/community.css` | Shared design styles and responsive behavior |
-| `src/data/community.ts` | Community links and resource listings |
-| `public/images/community/` | Logos, optimized event photos, video, and fonts |
-| `public/favicon.svg` | Favicon using the Bangladesh map-and-arrows logo emblem |
-| `docs/redesign.md` | Detailed design and content notes |
+| Path                                | Contents                                                          |
+| ----------------------------------- | ----------------------------------------------------------------- |
+| `src/pages/`                        | Homepage, members, resources, volunteers, and other routes        |
+| `src/components/community/`         | Shared community sections, gallery, logo, and buttons             |
+| `src/layouts/CommunityLayout.astro` | Navigation, metadata, favicon links, and page layout              |
+| `src/styles/community.css`          | Shared design styles and responsive behavior                      |
+| `src/data/community.ts`             | Community links, confirmed member profiles, and resource listings |
+| `public/images/community/`          | Logos, optimized event photos, video, and fonts                   |
+| `public/favicon.svg`                | Favicon using the Bangladesh map-and-arrows logo emblem           |
+| `docs/redesign.md`                  | Detailed design and content notes                                 |
 
 ## Deployment
 

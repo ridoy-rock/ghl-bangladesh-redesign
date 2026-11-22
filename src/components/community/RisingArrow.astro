@@ -1,0 +1,81 @@
+---
+interface Props {
+  id: string;
+  height?: number;
+  direction?: "up" | "right";
+}
+
+const { id, height = 320, direction = "up" } = Astro.props;
+const maskId = `${id}-mask`;
+const fadeId = `${id}-fade`;
+const path = `M65 0L130 64H93V${height}H37V64H0Z`;
+const isRight = direction === "right";
+---
+
+<svg
+  class={`rising-arrow rising-arrow-${direction}`}
+  viewBox={isRight
+    ? `-10 -10 ${height + 70} 150`
+    : `-10 -60 150 ${height + 70}`}
+  width={isRight ? height + 70 : 150}
+  height={isRight ? 150 : height + 70}
+  aria-hidden="true"
+  focusable="false"
+>
+  <defs>
+    <linearGradient
+      id={fadeId}
+      gradientUnits="userSpaceOnUse"
+      x1="0"
+      y1="0"
+      x2="0"
+      y2={height}
+    >
+      <stop offset="0" stop-color="white"></stop>
+      <stop offset="0.45" stop-color="white" stop-opacity="0.85"></stop>
+      <stop offset="1" stop-color="white" stop-opacity="0"></stop>
+    </linearGradient>
+    <mask
+      id={maskId}
+      maskUnits="userSpaceOnUse"
+      x="-20"
+      y="-80"
+      width="170"
+      height={height + 100}
+    >
+      <rect
+        x="-20"
+        y="-80"
+        width="170"
+        height={height + 100}
+        fill={`url(#${fadeId})`}></rect>
+    </mask>
+  </defs>
+  <g transform={isRight ? `translate(${height} 0) rotate(90)` : undefined}>
+    <g mask={`url(#${maskId})`}>
+      <path
+        d={path}
+        transform="translate(0 -44)"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
+        stroke-linejoin="round"
+        opacity="0.38"></path>
+      <path
+        d={path}
+        fill="currentColor"
+        stroke="currentColor"
+        stroke-width="10"
+        stroke-linejoin="round"></path>
+    </g>
+  </g>
+</svg>
+
+<style>
+  .rising-arrow {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+</style>

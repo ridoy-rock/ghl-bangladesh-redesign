@@ -1,28 +1,24 @@
 ---
-// One member of GHL Bangladesh as a card: a square photo with the role on a
-// frosted label, the name and what they do. Data: `members` in
-// src/data/community.ts; page: src/pages/members.astro.
-// Sample cards (`sample: true`) show an outline of a person instead of a photo
-// and a "Sample" label, so they can never pass for a real member.
 import Photo from "./Photo.astro";
 import type { Member } from "../../data/community";
 
 interface Props {
   member: Member;
-  // colour of the role dot, taken in turn from the three logo arrows
   accent?: "green" | "blue" | "yellow";
-  // unique id for the card heading (sample cards share a name)
-  uid?: string;
 }
 
-const { member, accent = "green", uid } = Astro.props;
-const { name, role, about, photo, alt = "", focus, sample } = member;
-const id = uid ?? `member-${name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
+const { member, accent = "green" } = Astro.props;
+const { name, role, about, photo, alt = "", focus, sample, links } = member;
+const articleId = `member-card-${member.slug}`;
+const headingId = `member-${member.slug}`;
+const sampleLabelId = `member-sample-${member.slug}`;
 ---
 
 <article
+  id={articleId}
   class:list={["member-card", { "is-sample": sample }]}
-  aria-labelledby={id}
+  aria-labelledby={headingId}
+  aria-describedby={sample ? sampleLabelId : undefined}
   data-accent={accent}
 >
   <div class="member-media">
@@ -35,7 +31,7 @@ const id = uid ?? `member-${name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
           <Photo
             name={photo}
             alt={alt}
-            sizes="(max-width: 599px) calc(100vw - 56px), (max-width: 999px) 45vw, 400px"
+            sizes="(max-width: 599px) calc(50vw - 24px), (max-width: 999px) 44vw, (max-width: 1179px) 30vw, 280px"
           />
         </div>
       ) : (
@@ -44,17 +40,41 @@ const id = uid ?? `member-${name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
             <circle cx="100" cy="95" r="40" />
             <path d="M22 250c0-58 34-96 78-96s78 38 78 96" />
           </svg>
-          {sample && <span class="member-sample">Sample</span>}
+          {sample && (
+            <span class="member-sample" id={sampleLabelId}>
+              Sample
+            </span>
+          )}
         </div>
       )
     }
-    <span class="member-role"
-      ><span class="member-dot" aria-hidden="true"></span>{role}</span
-    >
+    <span class="member-role">
+      <span class="member-dot" aria-hidden="true"></span>{role}
+    </span>
   </div>
   <div class="member-body">
-    <h3 class="member-name" id={id}>{name}</h3>
+    <h3 class="member-name" id={headingId}>{name}</h3>
     <p class="member-about">{about}</p>
+    {
+      links.length > 0 && (
+        <div
+          class="member-links"
+          role="group"
+          aria-label={`${name} profile links`}
+        >
+          {links.map((link) => (
+            <a
+              href={link.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`${name} — ${link.label} (opens in a new tab)`}
+            >
+              {link.label}
+            </a>
+          ))}
+        </div>
+      )
+    }
   </div>
 </article>
 
@@ -80,8 +100,6 @@ const id = uid ?? `member-${name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
   .member-card[data-accent="yellow"] {
     --accent: var(--yellow);
   }
-
-  /* portrait crop of a meetup photo; the source photo stays intact */
   .member-media {
     position: relative;
   }
@@ -92,12 +110,8 @@ const id = uid ?? `member-${name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
     border-radius: var(--radius);
     background: var(--navy-2);
   }
-  /* sample card: an outline of a person on a tint of the card's colour */
   .member-placeholder {
     background: color-mix(in srgb, var(--accent) 14%, var(--paper-2));
-  }
-  :global(:root[data-theme="dark"]) .member-placeholder {
-    background: color-mix(in srgb, var(--accent) 12%, var(--navy-2));
   }
   .member-placeholder svg {
     position: absolute;
@@ -119,10 +133,10 @@ const id = uid ?? `member-${name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
     border: 1px dashed color-mix(in srgb, var(--ink) 40%, transparent);
     background: var(--card);
     color: var(--ink-2);
-    font-size: 11.5px;
+    font-size: 12px;
     font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    text-transform: none;
   }
   .member-card.is-sample {
     border-style: dashed;
@@ -135,7 +149,6 @@ const id = uid ?? `member-${name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
     object-position: var(--focus, center);
     transition: transform 0.8s var(--ease);
   }
-  /* soft shade at the foot of the photo so the role label always reads */
   .member-photo::after {
     content: "";
     position: absolute;
@@ -144,8 +157,6 @@ const id = uid ?? `member-${name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
     background: linear-gradient(180deg, transparent, rgba(6, 29, 48, 0.42));
     pointer-events: none;
   }
-
-  /* role on a frosted navy label, like the name labels in the story section */
   .member-role {
     position: absolute;
     z-index: 1;
@@ -162,7 +173,7 @@ const id = uid ?? `member-${name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     color: #fff;
-    font-size: 13.5px;
+    font-size: 14px;
     font-weight: 600;
     line-height: 1.2;
   }
@@ -174,7 +185,6 @@ const id = uid ?? `member-${name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
     background: var(--accent);
     box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 28%, transparent);
   }
-
   .member-body {
     flex: 1;
     display: flex;
@@ -193,10 +203,35 @@ const id = uid ?? `member-${name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
   .member-about {
     margin: 10px 0 0;
     color: var(--ink-2);
-    font-size: 15.5px;
+    font-size: 16px;
     line-height: 1.6;
   }
-
+  .member-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+    margin-top: auto;
+    padding-top: 14px;
+  }
+  .member-links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--ink);
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 5px;
+    text-decoration-thickness: 1px;
+  }
+  .member-links a:hover {
+    color: var(--forest);
+  }
+  .member-links a:focus-visible {
+    outline: 2px solid var(--forest);
+    outline-offset: 4px;
+    border-radius: 3px;
+  }
   @media (hover: hover) {
     .member-card:hover {
       transform: translateY(-6px);
@@ -206,11 +241,7 @@ const id = uid ?? `member-${name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
       transform: scale(1.04);
     }
   }
-  :global(:root[data-theme="dark"]) .member-card {
-    box-shadow: none;
-  }
-  /* two cards per row on phones: smaller type and labels */
-  @media (max-width: 599px) {
+  @media (max-width: 600px) {
     .member-card {
       padding: 5px;
       border-radius: calc(var(--radius) + 2px);
@@ -224,7 +255,7 @@ const id = uid ?? `member-${name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
       max-width: calc(100% - 14px);
       gap: 6px;
       padding: 4px 9px 5px 8px;
-      font-size: 11.5px;
+      font-size: 13px;
     }
     .member-dot {
       width: 6px;
@@ -234,7 +265,7 @@ const id = uid ?? `member-${name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
       top: 7px;
       left: 7px;
       padding: 3px 7px;
-      font-size: 10px;
+      font-size: 11px;
     }
     .member-body {
       padding: 12px 8px 8px;
@@ -244,8 +275,8 @@ const id = uid ?? `member-${name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
     }
     .member-about {
       margin-top: 6px;
-      font-size: 13.5px;
-      line-height: 1.5;
+      font-size: 15px;
+      line-height: 1.6;
     }
   }
   @media (prefers-reduced-motion: reduce) {

@@ -2,6 +2,16 @@
 
 The community website stays in the main Astro repository and deploys through the existing `ghlbangladesh` Cloudflare Pages project. Production domains: https://ghlbangladesh.com and https://www.ghlbangladesh.com. The marketer’s `tffarhad/ghl-bangladesh-website` repository is a content-structure reference, not this source repository.
 
+## Members page
+
+The `/members` page uses a centered, text-only introduction. At Mehedi’s request, the introductory group photo, “GHL Bangladesh” and “Our community” labels, and the directory description have been removed. The profile cards match Ridoy’s reference: square portraits, frosted role badges with logo-colour dots, rounded borders, soft shadows, and a four-column desktop grid that steps down to three and two columns. Typography stays upright in Plus Jakarta Sans. Header, mobile-menu, and footer navigation make the page discoverable.
+
+Confirmed profiles are maintained in the `members` array in `src/data/community.ts` and rendered by `MemberCard.astro`. Mehedi Sharif is listed as chapter leader and a HighLevel Certified Admin; Shariful Islam is listed as co-organiser of the GHL Bangladesh 2026 meetup. Their existing approved photographs and public profile links are reused. Eighteen separate `sampleMembers` placeholders reproduce the reference shown by Mehedi; they have explicit “Sample” labels, generic names and descriptions, coloured silhouettes, and no real portraits or profile links. Add further real members only with confirmed names, photographs, roles, descriptions, and links. The community invitation directs visitors to the established Facebook group and does not imply a profile-submission form or a new membership system.
+
+## Homepage benefit arrows
+
+The Learn, Connect, and Grow arrows use the join banner’s rounded arrow geometry, floating outline, and fading tail. `RisingArrow.astro` supplies a decorative SVG with unique gradient and mask IDs for each instance. The overview keeps its yellow/blue/green colours, increasing heights, staggered reveal, and horizontal arrows beside the text on phones. The join banner itself remains unchanged.
+
 ## Development
 
 Use Node 22.12 or newer. Run `npm ci`, `npm run dev`, `npm run check`, and `npm run build`. The build output is `dist/`. npm is the package manager; `.npmrc` retains compatibility with an unused template integration whose peer range predates Astro 6. The new pages do not use that integration.
@@ -25,31 +35,31 @@ Use Node 22.12 or newer. Run `npm ci`, `npm run dev`, `npm run check`, and `npm 
 
 User-supplied collection: https://www.playbook.com/s/ghlprojects/QpYamYiVaSVjLdKCfJoqWhuU (`GHL Meetup Bangladesh 2026`). Public previews and official Playbook WEBP exports were resized to 640, 1200, and 1800px WebP files. All 15 gallery filenames selected by Mehedi are imported, alongside the five existing photos; his DSC08672.JPG portrait is used separately in the story section. The public website serves local optimized copies, not expiring Playbook URLs or 18–26MB originals.
 
-| Local name | Source filename | Use |
-| --- | --- | --- |
-| meetup | DSC08684.JPG | Community group photo and hero |
-| conversations | DSC08234.JPG | Candid discussion |
-| speaker | DSC08669.JPG | Presentation |
-| building | DSC08236.JPG | Attendee working on a laptop |
-| workshop | DSC08662.JPG | Presentation with projected screen |
-| dsc08253 | DSC08253.JPG | Shariful Islam portrait in Our story; identified by Mehedi |
-| dsc08436 | DSC08436.JPG | Parliament view selected by Mehedi |
-| dsc08687 | DSC08687.JPG | Additional meetup group portrait selected by Mehedi |
-| dsc08636 | DSC08636.JPG | Selected event gallery photo |
-| dsc08567 | DSC08567.JPG | Selected event gallery photo |
-| dsc08546 | DSC08546.JPG | Selected event gallery photo |
-| dsc08543 | DSC08543.JPG | Selected event gallery photo |
-| dsc08517 | DSC08517.JPG | Selected event gallery photo |
-| dsc08501 | DSC08501.JPG | Selected event gallery photo |
-| dsc08489 | DSC08489.JPG | Selected event gallery photo |
-| dsc08463 | DSC08463.JPG | Selected event gallery photo |
-| dsc08408 | DSC08408.JPG | Selected event gallery photo |
-| dsc08339 | DSC08339.JPG | Selected event gallery photo |
-| dsc08278 | DSC08278.JPG | Selected event gallery photo |
-| dsc08260 | DSC08260.JPG | Selected event gallery photo |
-| dsc08237 | DSC08237.JPG | Selected event gallery photo |
-| dsc08548 | DSC08548.JPG | Mehedi’s seated story photo, exported from the original 7952×5304 JPEG |
-| mehedi-portrait | DSC08672.JPG | Chapter-leader photo, re-exported from the original 7952×5304 JPEG at higher quality |
+| Local name      | Source filename | Use                                                                                  |
+| --------------- | --------------- | ------------------------------------------------------------------------------------ |
+| meetup          | DSC08684.JPG    | Community group photo and hero                                                       |
+| conversations   | DSC08234.JPG    | Candid discussion                                                                    |
+| speaker         | DSC08669.JPG    | Presentation                                                                         |
+| building        | DSC08236.JPG    | Attendee working on a laptop                                                         |
+| workshop        | DSC08662.JPG    | Presentation with projected screen                                                   |
+| dsc08253        | DSC08253.JPG    | Shariful Islam portrait in Our story; identified by Mehedi                           |
+| dsc08436        | DSC08436.JPG    | Parliament view selected by Mehedi                                                   |
+| dsc08687        | DSC08687.JPG    | Additional meetup group portrait selected by Mehedi                                  |
+| dsc08636        | DSC08636.JPG    | Selected event gallery photo                                                         |
+| dsc08567        | DSC08567.JPG    | Selected event gallery photo                                                         |
+| dsc08546        | DSC08546.JPG    | Selected event gallery photo                                                         |
+| dsc08543        | DSC08543.JPG    | Selected event gallery photo                                                         |
+| dsc08517        | DSC08517.JPG    | Selected event gallery photo                                                         |
+| dsc08501        | DSC08501.JPG    | Selected event gallery photo                                                         |
+| dsc08489        | DSC08489.JPG    | Selected event gallery photo                                                         |
+| dsc08463        | DSC08463.JPG    | Selected event gallery photo                                                         |
+| dsc08408        | DSC08408.JPG    | Selected event gallery photo                                                         |
+| dsc08339        | DSC08339.JPG    | Selected event gallery photo                                                         |
+| dsc08278        | DSC08278.JPG    | Selected event gallery photo                                                         |
+| dsc08260        | DSC08260.JPG    | Selected event gallery photo                                                         |
+| dsc08237        | DSC08237.JPG    | Selected event gallery photo                                                         |
+| dsc08548        | DSC08548.JPG    | Mehedi’s seated story photo, exported from the original 7952×5304 JPEG               |
+| mehedi-portrait | DSC08672.JPG    | Chapter-leader photo, re-exported from the original 7952×5304 JPEG at higher quality |
 
 DSC08667.JPG was excluded because it was identified as reference-only. No upload date was used as an event date. No stock imagery, invented testimonials, or fabricated statistics are used. The Urbanist font is served locally from the prior website asset, removing build-time Google Fonts requests.
 
@@ -97,12 +107,12 @@ Requested by Ridoy after the first review:
 
 ### Inner pages, events, members (November 2026)
 
-- **Page banner** (`PageIntro.astro`, used on Resources, Volunteers, Events and Members) now follows the homepage hero: a meetup photo under the same navy veil (darkest behind the text), the header floating transparent on top of it (`.inner-page:has(.page-intro) .site-header`), the glass label with the round flag, a hero-sized centred title with a gradient ending (short endings such as “with us.” never break), the lead and the vertical “Scroll” cue (no button: the user asked to remove it). Props: `photo` and `focus` choose the photo and its crop, the `status` slot adds a status after the label (Volunteers: “Opening soon”). The old flat gradient band and its coloured bottom line are gone.
+- **Page banner** (`PageIntro.astro`, used on Resources, Volunteers and Events) now follows the homepage hero: a meetup photo under the same navy veil (darkest behind the text), the header floating transparent on top of it (`.inner-page:has(.page-intro) .site-header`), the glass label with the round flag, a hero-sized centred title with a gradient ending (short endings such as “with us.” never break), the lead and the vertical “Scroll” cue (no button: the user asked to remove it). Props: `photo` and `focus` choose the photo and its crop, the `status` slot adds a status after the label (Volunteers: “Opening soon”). The old flat gradient band and its coloured bottom line are gone.
 - **Volunteers page**: same content, new design. “Ways to help” is a list of the six example roles (number, title, description, when) beside a sticky meetup photo that changes with the role under the pointer or in the middle of the screen; each photo keeps its own gallery caption, so nobody is presented as a volunteer. The photo for each role is set by `photo` in `volunteerRoles`. On screens up to 960px every role carries its own photo. “How it works” uses the three rising logo arrows from the homepage (yellow, blue, green), with the community-updates button and the sign-up note beside the heading.
 - **Certification badge**: the chapter-leader card shows HighLevel’s Certified Admin badge on the photo corner, slightly turned, with a short stamp animation. The file (`public/images/community/highlevel-certified-admin.webp`, 640×789, transparent) was rebuilt from HighLevel’s own badge template, which is published at full resolution with its certificates, so it stays sharp; the centre has “CERTIFIED ADMIN” in bold on two lines, as in the supplied badge, instead of the template’s blank name line.
 - **Events page** (`src/pages/events/index.astro` with `EventsPageUpcoming`, `EventsPageLast`, `EventsPageFilmstrip`, `EventsPageMoments`): banner with the meetup room photo and a “Next meetup TBA” status; the upcoming meetup as a navy boarding pass (“Announcement coming soon”, “Your next local connection starts here.”, “Date to be announced · Bangladesh”, “Get Event Updates”), with a stub showing TBA on split-flap tiles and the dotted Bangladesh map as the place; the last event (GHL Meetup Bangladesh 2026) with its linked group photo, a calendar tile for 11 June 2026, the summary and a facts list (date, co-organisers with small face crops, 20 photos); all 20 photos running on a film strip (pause button, reduced motion turns it into a still scroller, the looping copy is hidden from screen readers and the keyboard) with the album link; “What a meetup looks like” with Learn / Ask questions / Share (the verbs of the page lead) on three meetup photos with their captions, shaped like the rising logo arrows. No upcoming event is announced, so nothing about the next meetup is filled in beyond “to be announced”; update `nextEvent` and the TBA labels together once it is confirmed.
-- **Members page** (`src/pages/members.astro`, `MemberCard.astro`, data in `members` in `src/data/community.ts`): banner with the group photo, then one card per member with a square photo, a frosted role label, the name and what they do in the community (the user asked to drop the badge and the Facebook/website links from these cards; the badge stays on the homepage chapter-leader card). Only the two confirmed people are listed so far, Mehedi Sharif (chapter leader, HighLevel Certified Admin) and Shariful Islam (co-organiser of GHL Meetup Bangladesh 2026), followed by an open “Pull up a chair.” seat that links to the Facebook group. Add more members to `members` once their names, photos and roles are confirmed. For now the grid (four columns on wide screens) also shows 18 placeholder cards the user asked for, so the layout can be seen with many people: each is marked “Sample”, shows an outline of a person instead of a photo, “Member name” and “Role” (the user asked to drop the explanatory note above the grid). They come from `sampleMembers` in `src/data/community.ts`; delete that list once the real members are in, and never send it to the standard repository.
-- **Navigation**: “Events” now opens the Events page (`/events`) on every page (header and footer), a “Members” link is added, and the menu button takes over below 1181px so the five links never squeeze the logo.
+- **Members page**: Titas vai’s own Members page (see “Members page” at the top of this file) is kept; the draft built here was replaced by it when his changes were merged.
+- **Navigation**: “Events” now opens the Events page (`/events`) on every page (header and footer), after Titas vai’s “Members” link; the menu button takes over below 1121px (his breakpoint) so the five links never squeeze the logo.
 
 ## Home v3 (draft)
 

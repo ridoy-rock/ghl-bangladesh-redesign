@@ -1,6 +1,65 @@
 export const groupUrl = "https://www.facebook.com/groups/highlevelbangladesh";
 export const albumUrl =
   "https://www.playbook.com/s/ghlprojects/QpYamYiVaSVjLdKCfJoqWhuU";
+
+export interface Member {
+  slug: string;
+  name: string;
+  role: string;
+  about: string;
+  photo?: string;
+  alt?: string;
+  focus?: string;
+  sample?: boolean;
+  links: { label: string; url: string }[];
+}
+
+// Add a profile only when its name, photo, role and links are confirmed.
+export const members: Member[] = [
+  {
+    slug: "mehedi-sharif",
+    name: "Mehedi Sharif",
+    role: "Chapter leader",
+    about:
+      "HighLevel Certified Admin and the chapter leader for HighLevel Bangladesh. Organises our local meetups.",
+    photo: "mehedi-portrait",
+    alt: "Mehedi Sharif speaking at the GHL Bangladesh meetup",
+    focus: "46% center",
+    links: [
+      {
+        label: "Facebook",
+        url: "https://www.facebook.com/mehedi.sharif.titas",
+      },
+      { label: "Website", url: "https://mehedisharif.com" },
+    ],
+  },
+  {
+    slug: "shariful-islam",
+    name: "Shariful Islam",
+    role: "Co-organiser",
+    about: "Co-organised GHL Meetup Bangladesh 2026 with Mehedi Sharif.",
+    photo: "dsc08543",
+    alt: "Shariful Islam speaking into a microphone at the GHL Bangladesh meetup",
+    focus: "62% center",
+    links: [
+      { label: "Facebook", url: "https://www.facebook.com/vidmshariful" },
+    ],
+  },
+];
+
+// These are visibly labelled placeholders, not community member profiles.
+export const sampleMembers: Member[] = Array.from(
+  { length: 18 },
+  (_, index) => ({
+    slug: `sample-member-${index + 1}`,
+    name: "Member name",
+    role: "Role",
+    about: "A sentence or two about what this member does.",
+    sample: true,
+    links: [],
+  }),
+);
+
 export const resources = [
   {
     number: "01",
@@ -201,46 +260,3 @@ export const volunteerRoles = [
     photo: "dsc08237",
   },
 ];
-// Members page (/members): one entry per member, shown as a card in this
-// order. Add only confirmed details. To add a member, copy an entry and fill in:
-// - name, role (their role in the community) and about (what they do, a
-//   sentence or two)
-// - photo: name of a photo in public/images/community, saved in three widths as
-//   <name>-640.webp, <name>-1200.webp and <name>-1800.webp; alt describes it
-// - focus: which part of the photo stays in the portrait crop (CSS
-//   object-position, e.g. "62% center"; the first value moves left/right)
-export type Member = {
-  name: string;
-  role: string;
-  about: string;
-  photo?: string;
-  alt?: string;
-  focus?: string;
-  // placeholder card without a real person (see sampleMembers below)
-  sample?: boolean;
-};
-export const members: Member[] = [
-  {
-    name: "Mehedi Sharif",
-    role: "Chapter leader",
-    about:
-      "HighLevel Certified Admin and the chapter leader for HighLevel Bangladesh. Organises our local meetups.",
-    photo: "mehedi-portrait",
-    alt: "Mehedi Sharif holding a microphone beside the GHL Bangladesh meetup banner",
-    focus: "46% center",
-  },
-  {
-    name: "Shariful Islam",
-    role: "Co-organiser",
-    about: "Co-organised GHL Meetup Bangladesh 2026 with Mehedi Sharif.",
-    photo: "dsc08543",
-    alt: "Shariful Islam speaking into a microphone at the GHL Bangladesh meetup",
-    focus: "62% center",
-  },
-];
-// SAMPLE CARDS, NOT REAL PEOPLE: placeholders the user asked for so the Members
-// page can be seen with many people. Each one is marked "Sample" on the page and
-// has no photo, name or role. Replace them with real members (add those to
-// `members` above) and then delete this list; never send it to the standard
-// repository (mehedi-sharif/ghlbangladesh).
-export const sampleMembers: Member[] = [];

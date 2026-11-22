@@ -15,8 +15,8 @@ const {
 const home = Astro.url.pathname === "/";
 const nav = [
   ["Community", home ? "#community" : "/#community"],
-  ["Events", "/events"],
   ["Members", "/members"],
+  ["Events", "/events"],
   ["Resources", "/resources"],
   ["Volunteers", "/volunteers"],
 ];
@@ -220,7 +220,7 @@ const socialImageAlt = "GHL Bangladesh — HighLevel community in Bangladesh";
           toggle.focus();
         }
       });
-      matchMedia("(min-width: 1181px)").addEventListener("change", (e) => {
+      matchMedia("(min-width: 1121px)").addEventListener("change", (e) => {
         if (e.matches) setMenu(false);
       });
 
